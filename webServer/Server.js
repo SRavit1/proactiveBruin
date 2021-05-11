@@ -25,8 +25,8 @@ app.get('/', function (req, res) {
 })
 
 app.post('/sendData', function (req, res) {
-	//console.log("sendData request to server")
-	//console.log(req.body)
+	console.log("sendData request to server")
+	console.log("timeTable is", req.body.timeTable)
 
 	if (!(knownIds.includes(req.body.id))) {
 		let createTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + " (hostname VARCHAR(255), time INT, date DATE);"

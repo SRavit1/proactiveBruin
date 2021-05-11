@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	xhr.send(JSON.stringify({"id":bg.id}))
 	xhr.onreadystatechange = function() {
 		if (!done) {
+			let returnData = xhr.responseText.trim()
+			if (returnData === "") return
 			siteDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
 			console.log(siteDataText)
 			siteData = JSON.parse(siteDataText)["key_val"]
