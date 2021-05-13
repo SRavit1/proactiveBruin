@@ -18,14 +18,15 @@ function extractHostname(url) {
     return hostname;
 }
 
-window.id = Date.now().toString(36) + Math.random().toString(36).substring(2);
-window.timeTable = {}
+function generateID() {
+	let id = ""
+	for (let i = 0; i < 7; i++)
+		id += String.fromCharCode(97+Math.random()*26)
+  return id
+}
 
-/*
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	window.timeTable[request.url] = request.time
-})
-*/
+window.id = generateID;
+window.timeTable = {}
 
 chrome.browserAction.onClicked.addListener(function (tab) {
 	chrome.tabs.create({url: 'dashboard.html'})
