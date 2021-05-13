@@ -1,0 +1,42 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+    /*background: linear-gradient(-90deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);*/
+	/*background: linear-gradient(-90deg, #f4cb01, #0095ff, #f4cb01, #0095ff, #f4cb01, #0095ff);*/
+	background: linear-gradient(-90deg, #f4cb01, #0095ff);
+	position: relative;
+	background-size: 125%;
+}
+
+#Title {
+	color: white;
+	text-align: center;
+	font-family: arial;
+	
+	letter-spacing: 2px;
+	border: 3px solid #fff;
+	border-radius: 30px;
+	text-transform: lowercase;
+	text-shadow: 3px 3px #000000;
+	box-shadow: 3px 3px #000000;
+	margin: auto;
+	width: 30%;
+	padding: 5px 10px;
+}
+
+h3 {
+	
+	text-align: center;
+	text-shadow: 3px 3px #000000;
+	
+}
+
+em {
+	color: white;
+}
+
+.dropdown {
+	align-content: center;
+}

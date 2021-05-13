@@ -1,12 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 <head>
   <meta charset="UTF-8">
   <title>Proactive Bruin Dashboard</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Facebook',     11],
+          ['Instagram',      2],
+          ['Netflix',  2],
+          ['Youtube', 2],
+          ['CCLE',    7]
+        ]);
+
+        var options = {
+          title: 'My Daily Screentime'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+	<style>
+</style>
 </head>
+	
 <body>
-  testing dashboard!
-  <div id="siteInfo"></div>
-  <script src="dashboard.js" charset="utf-8"></script>
+	<div class="container">
+		<div class="row">
+		<div class="col-sm-12 logo">
+		<h1 id="Title">proactive bruin </h1>
+		</div>
+		</div>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3><em>goals</em></h3>
+	<div class="dropdown">
+	  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown 
+	  <span class="caret"></span></button>
+	  <ul class="dropdown-menu">
+		<li><a href="#">Productivity</a></li>
+		<li><a href="#">Social Media</a></li>
+		<li><a href="#">S</a></li>
+	  </ul>
+	</div>
+	<p>see your stats&nbsp;</p>
+		
+      <button href="/goals.html" type="button" class="btn btn-success">set your goals!</button>
+	<p>Set Goal for social media use: &nbsp;</p>
+	<p>Set Goal for _____ use: &nbsp;</p>
+    </div>
+	  
+    <div class="col-sm-6">
+    <h3><em>stats&nbsp;&nbsp;</em></h3>
+	<div class="dropdown">
+	  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown 
+	  <span class="caret"></span></button>
+	  <ul class="dropdown-menu">
+		<li><a href="#">Productivity</a></li>
+		<li><a href="#">Social Media</a></li>
+		<li><a href="#">S</a></li>
+	  </ul>
+	</div>
+    <div id="piechart" class="charts"> </div>
+	
+    </div>
+  </div>
+<div class="row">
+		<div class="col-sm-12">
+		<p>&nbsp; </p>
+	</div>
+	  </div>
+</div>
 </body>
 </html>
