@@ -1,3 +1,5 @@
+background_window = chrome.extension.getBackgroundPage().window
+
 function drawChart() {
 	var data = google.visualization.arrayToDataTable([
 	  ['Task', 'Hours per Day'],
