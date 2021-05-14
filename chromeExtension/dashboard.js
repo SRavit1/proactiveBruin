@@ -1,12 +1,29 @@
-/*
-TODO:
-- obtain data from server
-- use React to display data
+function drawChart() {
+	var data = google.visualization.arrayToDataTable([
+	  ['Task', 'Hours per Day'],
+	  ['Facebook',     11],
+	  ['Instagram',      2],
+	  ['Netflix',  2],
+	  ['Youtube', 2],
+	  ['CCLE',    7]
+	]);
 
-*/
-document.addEventListener('DOMContentLoaded', function () {
+	var options = {
+	  title: 'My Daily Screentime'
+	};
 
-	var done = false;
+	var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+	chart.draw(data, options);
+}
+
+document.addEventListener('DOMContentLoaded', onLoad, false)
+
+function onLoad() {
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	var done = false
 	const bg = chrome.extension.getBackgroundPage()
 
 
@@ -23,15 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.log(siteDataText)
 			siteData = JSON.parse(siteDataText)["key_val"]
 
-			for (site in siteData) {
-				const div = document.createElement('div')
-				console.log(siteData[site])
-				div.textContent = siteData[site]["hostname"] + " " + siteData[site]["time"]
-				document.body.appendChild(div)
-			}
-			done = true;
+			console.log(siteData)
+			done = true
 		}
 	}
-
-
-}, false)
+}
