@@ -25,7 +25,7 @@ function generateID() {
   return id
 }
 
-window.id = generateID;
+window.id = generateID();
 window.timeTable = {}
 
 chrome.browserAction.onClicked.addListener(function (tab) {
