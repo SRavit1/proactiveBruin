@@ -14,5 +14,6 @@
   "background": {
     "scripts": ["background.js"]
   },
-  "permissions": ["tabs"]
+  "permissions": ["tabs"],
+  "content_security_policy":"script-src 'self' 'unsafe-inline' 'sha256-bHouoRuLqiMD3EdzM09puwwsFyUMVrW6I/kb+oqCWDs=' https://ajax.googleapis.com https://maxcdn.bootstrapcdn.com https://www.gstatic.com; object-src 'self'"
 }
