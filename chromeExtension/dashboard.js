@@ -1,14 +1,23 @@
 background_window = chrome.extension.getBackgroundPage().window
 
-function drawChart() {
-	var data = google.visualization.arrayToDataTable([
-	  ['Task', 'Hours per Day'],
-	  ['Facebook',     11],
-	  ['Instagram',      2],
-	  ['Netflix',  2],
-	  ['Youtube', 2],
-	  ['CCLE',    7]
-	]);
+function listSiteData(siteData)
+{
+	//Add data from webserver
+	var screentimeData = [['Task', 'Hours per Day']];
+	for (site in siteData){
+		screentimeData.push([siteData[site]["hostname"], siteData[site]["time"]])
+	}
+	//sort by time
+	screentimeData.sort(function(a,b){
+		return a[1]-b[1]
+	});
+
+	return screentimeData;
+}
+
+function drawChart(siteData) {
+
+	var data = google.visualization.arrayToDataTable(listSiteData(siteData));
 
 	var options = {
 	  title: 'My Daily Screentime'
@@ -23,7 +32,6 @@ document.addEventListener('DOMContentLoaded', onLoad, false)
 
 function onLoad() {
 	google.charts.load('current', {'packages':['corechart']});
-	google.charts.setOnLoadCallback(drawChart);
 
 	var done = false
 	const bg = chrome.extension.getBackgroundPage()
@@ -43,7 +51,11 @@ function onLoad() {
 			siteData = JSON.parse(siteDataText)["key_val"]
 
 			console.log(siteData)
+
+			google.charts.setOnLoadCallback(drawChart(siteData));
 			done = true
 		}
 	}
+
+	
 }
