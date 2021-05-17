@@ -3,6 +3,7 @@ exports.getDateString = function (date) {
 }
 
 exports.getCurrDateString = function () {
+	let date = new Date()
 	return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
 }
 
