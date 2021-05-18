@@ -2,11 +2,29 @@ background_window = chrome.extension.getBackgroundPage().window
 
 function listSiteData(siteData)
 {
-	//Add data from webserver
-	var screentimeData = [['Task', 'Hours per Day']];
+
+	//adds times for duplicates
+	var sitename = []
+	var sitetime = []
+	var temp = ""
 	for (site in siteData){
-		screentimeData.push([siteData[site]["hostname"], siteData[site]["time"]])
+		temp = String(siteData[site]["hostname"])
+		if (!sitename.includes(temp)){
+			sitename.push(temp)
+			sitetime.push(Number(siteData[site]["time"]))
+		}
+		else if (sitename.includes(temp)){
+			sitetime[sitename.indexOf(temp)] += Number(siteData[site]["time"])
+		}		
 	}
+
+	//add data from webserver
+	var screentimeData = [['Task', 'Hours per Day']];
+	var i = 0
+	for (i=0; i<sitename.length;i++){
+		screentimeData.push([sitename[i] , sitetime[i]])
+	}
+
 	//sort by time
 	screentimeData.sort(function(a,b){
 		return a[1]-b[1]
