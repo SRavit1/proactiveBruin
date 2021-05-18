@@ -104,7 +104,7 @@ selectElement.addEventListener('change', (event) => {
 function drawCategoryChart() {
 	var entertainmentnum = 0
 	var productivitynum = 0
-	var other = 0
+	var othernum = 0
 	var shoppingnum = 0
 	for (i=1; i<globProcessedSiteData.length; i++){
 		temp = globProcessedSiteData[i][0]
