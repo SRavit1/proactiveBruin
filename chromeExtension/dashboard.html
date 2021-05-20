@@ -1,58 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Proactive Bruin Dashboard</title>
-	<link href="style.css" rel="stylesheet" type="text/css">
-	<script src="utils.js"></script>
-	<script src="dashboard.js"></script>
-	<link rel="stylesheet" href="libraries/bootstrap.min.css">
-	<script src="libraries/jquery.min.js"></script>
-	<script src="libraries/bootstrap.min.js"></script>
-	<script src="libraries/loader.js"></script>
+<meta charset="UTF-8">
+
+<title>Proactive Bruin Dashboard</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="utils.js"></script> 
+<script src="dashboard.js"></script> 
+
+<!--<link rel="stylesheet" href="libraries/bootstrap.min.css">--> 
+
+<!--<script src="libraries/jquery.min.js"></script>--> 
+
+<!--<script src="libraries/bootstrap.min.js"></script>-->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="libraries/loader.js"></script>
+<link href="datepicker.css" rel="stylesheet" type="text/css">
+<script src="bootstrap-datepicker.js"></script>
 </head>
 
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12 logo">
-				<h1 id="Title">proactive bruin </h1> </div>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-				<h3><em>goals</em></h3>
-				<div class="dropdown">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown <span class="caret"></span></button>
-					<ul class="dropdown-menu">
-						<li><a href="#">Productivity</a></li>
-						<li><a href="#">Social Media</a></li>
-						<li><a href="#">S</a></li>
-					</ul>
-				</div>
-				<p>see your stats&nbsp;</p>
-				<button href="/goals.html" type="button" class="btn btn-success">set your goals!</button>
-				<p>Set Goal for social media use: &nbsp;</p>
-				<p>Set Goal for _____ use: &nbsp;</p>
-			</div>
-			<div class="col-sm-6">
-				<h3><em>stats&nbsp;&nbsp;</em></h3>
-				 <select class="statsselect" name="statsselect">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 logo">
+      <h1 id="Title">proactive bruin </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3><em>goals</em></h3>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="#">Productivity</a></li>
+          <li><a href="#">Social Media</a></li>
+          <li><a href="#">S</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <h3><em>stats&nbsp;&nbsp;</em></h3>
+      <select class="statsselect" name="statsselect">
  			 	  	<option value="">Select One...</option>
   				  	<option value="Websites">Websites</option>
   				  	<option value="Catagories">Catagories</option>
   				  	<option value="Weekly Breakdown">Weekly Breakdown</option>
  			 </select>
-				<div id="piechart" class="charts"> </div>
-				<div id="result"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-12">
-				<p>&nbsp; </p>
-			</div>
-		</div>
-	</div>
-</body>
+      <div id="piechart" class="charts"> </div>
+	<div id="result"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <fieldset>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th width="17%">Start Date</th>
+              <th width="17%">End Date</th>
+              <th width="17%">Start Goal</th>
+              <th width="17%">End Goal</th>
+              <th width="10%">Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Productivity</td>
+              <td>05-16-2021</td>
+              <td>05-30-2021</td>
+              <td>60</td>
+              <td>15</td>
+              <td><a class="btEditGoal"><i class="fa fa-edit"></i></a></td>
+            </tr>
+			  <tr>
+              <td>Social Media</td>
+              <td>05-16-2021</td>
+              <td>05-30-2021</td>
+              <td>60</td>
+              <td>15</td>
+              <td><a class="btEditGoal"><i class="fa fa-edit"></i></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+      <div class="row" id="editGoal">
+        <form name="myForm" class="form-horizontal" action="#">
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label class="control-label col-sm-4" for="pwd">Method:</label>
+              <div class="col-sm-8">
+                <select class="form-control" disabled>
+				  	<option>Productivity</option>
+				  </select>
+              </div>
+            </div>
+          </div>
+			<div class="form-group">
+            <div class="col-sm-6">
+              <label class="control-label col-sm-4" for="pwd">Start Date:</label>
+              <div class="col-sm-8">
+                <input type="date" id="sDate" name="sDate"  class="form-control" placeholder="05/16/2021">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label col-sm-4" for="pwd">End Date:</label>
+              <div class="col-sm-8">
+                <input type="date" id="eDate" name="eDate"  class="form-control">
+              </div>
+            </div>
+          </div>
+			<div class="form-group">
+            <div class="col-sm-6">
+              <label class="control-label col-sm-4" for="pwd">Start Goal:</label>
+              <div class="col-sm-8">
+                <input type="text"  name="SGoal"  class="form-control">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label col-sm-4" for="pwd">End Goal:</label>
+              <div class="col-sm-8">
+                <input type="text" id="eGDate" name="eGDate"  class="form-control">
+              </div>
+            </div>
+          </div>
+			<div class="form-group btnRow">
+				<!--<a type="submit" id="saveGoal" class="btn btn-primary  active"><i class="fa fa-save"></i> Save</a>
 
-</html>
+				<button onclick="myFunction()">Save</button>
+				<button onclick="myFunction()">Cancel</button>
+
+				<button onclick="myFunction()">Click me</button>
+				<a type="submit" id="cancelGoal" class="btn btn-default active"><i class="fa fa-times"></i> Cancel</a>-->
+				<button onclick="myFunction()">Save</button>
+				<button onclick="myFunction()">Cancel</button>
+			</div>
+        </form>
+      </div>
+
+		<!--<button href="/goals.html" type="button" class="btn btn-success">set your goals!</button> 
+      <p>Set Goal for social media use: &nbsp;</p>
+      <p>Set Goal for _____ use: &nbsp;</p>-->
+    </div>
+    <div class="col-sm-6">
+      <fieldset>
+		  
+		  
+		  
+		  
+				
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>&nbsp; </p>
+    </div>
+  </div>
+</div>
+	<script>
+		$( document ).ready(function() {
+			$("#editGoal").hide();
+			$(".btEditGoal").click(function(){
+			  $("#editGoal").show();
+			});
+			$("#saveGoal").click(function(){
+			  $("#editGoal").hide();
+			});
+			$("#cancelGoal").click(function(){
+			  $("#editGoal").hide();
+			});
+		});
+	</script>
+</body>
+</html> 

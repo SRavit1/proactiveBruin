@@ -37,6 +37,12 @@ em {
 	color: white;
 }
 
-.dropdown {
-	align-content: center;
+p {
+	text-align: center;
 }
+table a{font-weight:bold;text-decoration: underline;color:#3e3e3e!important;text-align:center}
+table a:hover{text-decoration: none;}
+table th{background:#034ea2;color:#f4cb01!important;font-weight:bold;}
+.form-horizontal .control-label{padding-right:0px!important}
+.btnRow{text-align:center;padding-top:20px;}
+.btnRow a{font-weight:bold;}
