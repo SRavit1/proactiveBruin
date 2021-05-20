@@ -33,7 +33,7 @@ function listSiteData(siteData)
 
 	//sort by time
 	screentimeData.sort(function(a,b){
-		return a[1]-b[1]
+		return b[1]-a[1] //high to low
 	});
 	
 	globProcessedSiteData = screentimeData //sets processed var on load
@@ -41,17 +41,33 @@ function listSiteData(siteData)
 	return screentimeData;
 }
 
-function drawChart(siteData) {
+function drawCharts(siteData) {
 
 	var data = google.visualization.arrayToDataTable(listSiteData(siteData));
 
-	var options = {
-	  title: 'My Daily Screentime'
+	//piechart
+	var piechart_options = {
+	  title: 'Pie Chart: My Daily Screentime'
 	};
+	var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
+	piechart.draw(data, piechart_options);
 
-	var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+	//barchart
+	var barchart_options = {
+		title: 'Bar Chart: My Daily Screentime'
+	}
+	var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
+	barchart.draw(data, barchart_options);
 
-	chart.draw(data, options);
+	/* //linechart
+	//TODO: get data as function of time
+	var linechart_options = {
+		title: "Line Chart: My Monthly Screentime",
+		curveType: 'function'
+	};
+	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
+	linechart.draw(data, linechart_options); */
+
 }
 
 document.addEventListener('DOMContentLoaded', onLoad, false)
@@ -80,28 +96,30 @@ function onLoad() {
 			
 			globsiteData = siteData //sets glob var on load
 			
-			google.charts.setOnLoadCallback(drawChart(siteData));
+			google.charts.setOnLoadCallback(drawCharts(siteData));
 			done = true
 		}
 	}
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-const selectElement = document.querySelector('.statsselect');
-selectElement.addEventListener('change', (event) => {
-  const result = document.getElementById('result');
-  result.textContent = `You selected ${event.target.value}`;
-  if(event.target.value == 'Websites'){
-  	google.charts.setOnLoadCallback(drawChart(globsiteData));
-  }
-  else {
-  	drawCategoryChart()
-  }
-});
+	const selectElement = document.querySelector('.statsselect');
+	selectElement.addEventListener('change', (event) => {
+		const result = document.getElementById('result');
+		result.textContent = `You selected ${event.target.value}`;
+		
+		if(event.target.value == 'Websites'){
+			google.charts.setOnLoadCallback(drawCharts(globsiteData));
+		}
+		else {
+			drawCategoryChart()
+		}
+	});
 })
 
 
 function drawCategoryChart() {
+	//TODO: there's lots of similar parts, so refactoring later might be a good idea
 	var entertainmentnum = 0
 	var productivitynum = 0
 	var othernum = 0
@@ -122,21 +140,48 @@ function drawCategoryChart() {
 			othernum+=Number(globProcessedSiteData[i][1])
 		}
 	}
-	var data = google.visualization.arrayToDataTable([
-	  ['Task', 'Hours per Day'],
-	  ['Entertainment',     entertainmentnum],
-	  ['Productivity',      productivitynum],
-	  ['Shopping',  shoppingnum],
-	  ['Other',    othernum],
-	]);
+	var catData = [
+		['Task', 'Hours per Day'],
+		['Entertainment',     entertainmentnum],
+		['Productivity',      productivitynum],
+		['Shopping',  shoppingnum],
+		['Other',    othernum],
+	];
+
+	catData.sort(function(a,b){
+		return b[1]-a[1] //high to low
+	});
+	
+	var data = google.visualization.arrayToDataTable(catData);
 
 	var options = {
 	  title: 'Daily Screentime By Category'
 	};
 
-	var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+	//piechart
+	var piechart_options = {
+		title: 'Pie Chart: My Daily Screentime'
+		};
+	var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
+	piechart.draw(data, piechart_options);
 
-	chart.draw(data, options);
+	//barchart
+	var barchart_options = {
+		title: 'Bar Chart: My Daily Screentime'
+	}
+	var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
+	barchart.draw(data, barchart_options);
+
+	/* //linechart
+	//TODO: get data as function of time
+	var linechart_options = {
+		title: "Line Chart: My Monthly Screentime",
+		curveType: 'function'
+	};
+	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
+	linechart.draw(data, linechart_options); */
+
+	
 }
 
 
