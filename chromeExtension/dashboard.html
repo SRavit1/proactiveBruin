@@ -25,6 +25,7 @@
 </head>
 
 <body>
+	<script>alert("hello")</script>
 <div class="container">
   <div class="row">
     <div class="col-sm-12 logo">
@@ -34,14 +35,14 @@
   <div class="row">
     <div class="col-sm-6">
       <h3><em>goals</em></h3>
-      <div class="dropdown">
+      <!--<div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown <span class="caret"></span></button>
         <ul class="dropdown-menu">
           <li><a href="#">Productivity</a></li>
           <li><a href="#">Social Media</a></li>
           <li><a href="#">S</a></li>
         </ul>
-      </div>
+      </div>-->
     </div>
     <div class="col-sm-6">
       <h3><em>stats&nbsp;&nbsp;</em></h3>
@@ -96,8 +97,10 @@
             <div class="col-sm-6">
               <label class="control-label col-sm-4" for="pwd">Method:</label>
               <div class="col-sm-8">
-                <select class="form-control" disabled>
+                <select class="form-control">
 				  	<option>Productivity</option>
+					<option>Entertainment</option>
+					<option>Shopping</option>
 				  </select>
               </div>
             </div>
@@ -138,8 +141,8 @@
 
 				<button onclick="myFunction()">Click me</button>
 				<a type="submit" id="cancelGoal" class="btn btn-default active"><i class="fa fa-times"></i> Cancel</a>-->
-				<button onclick="myFunction()">Save</button>
-				<button onclick="myFunction()">Cancel</button>
+				<button onclick="processRequest()">Save</button>
+				<button onclick="processRequest()">Cancel</button>
 			</div>
         </form>
       </div>
