@@ -50,7 +50,11 @@ function sendGoalRequest(startDate, endDate, startGoal, endGoal, method) {
     xhr.send(JSON.stringify(createGoalReq))
 }
 
-function hello()
+function processRequest()
 {
-	alert("hello")
+	var sd = document.getElementsByName("sDate").value
+	var ed = document.getElementsByName("eDate").value
+	var sg = document.getElementsByName("SGoal").value
+	var eg = document.getElementsByName("eGDate").value
+	sendGoalRequest(sd, ed, sg, eg, "linear")
 }
