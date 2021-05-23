@@ -16,5 +16,5 @@
     "scripts": ["utils.js", "background.js"]
   },
   "permissions": ["tabs"],
-  "content_security_policy":"script-src 'self' https://www.gstatic.com; object-src 'self'"
+  "content_security_policy":"script-src 'self' https://cdnjs.cloudflare.com https://www.gstatic.com https://ajax.googleapis.com/ https://maxcdn.bootstrapcdn.com/; object-src 'self'"
 }

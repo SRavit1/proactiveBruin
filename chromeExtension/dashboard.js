@@ -214,3 +214,16 @@ var Shopping = [
 "www.target.com",
 "www.amazon.com"
 ]
+
+$( document ).ready(function() {
+	$("#editGoal").hide();
+	$(".btEditGoal").click(function(){
+	  $("#editGoal").show();
+	});
+	$("#saveGoal").click(function(){
+	  $("#editGoal").hide();
+	});
+	$("#cancelGoal").click(function(){
+	  $("#editGoal").hide();
+	});
+});
