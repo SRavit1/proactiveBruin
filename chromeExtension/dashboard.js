@@ -220,10 +220,11 @@ $( document ).ready(function() {
 	$(".btEditGoal").click(function(){
 	  $("#editGoal").show();
 	});
-	$("#saveGoal").click(function(){
-	  $("#editGoal").hide();
+	$("#sendGoalButton").click(function(){
+	  processGoalRequest();
+	  //$("#editGoal").hide();
 	});
 	$("#cancelGoal").click(function(){
-	  $("#editGoal").hide();
+	  //$("#editGoal").hide();
 	});
 });

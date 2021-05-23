@@ -36,8 +36,8 @@ function getDateString (date) {
 function sendGoalRequest(startDate, endDate, startGoal, endGoal, method) {
     var createGoalReq = {
         "id":background_window.id,
-        "startDate":getDateString(startDate),
-        "endDate":getDateString(endDate),
+        "startDate":startDate,
+        "endDate":endDate,
         "startGoal":startGoal,
         "endGoal":endGoal,
         "method":method
@@ -48,13 +48,15 @@ function sendGoalRequest(startDate, endDate, startGoal, endGoal, method) {
     xhr.setRequestHeader("Content-Type", "application/json")
 
     xhr.send(JSON.stringify(createGoalReq))
+
+    console.log("sending create goal request")
 }
 
-function processRequest()
+function processGoalRequest()
 {
-	var sd = document.getElementsByName("sDate").value
-	var ed = document.getElementsByName("eDate").value
-	var sg = document.getElementsByName("SGoal").value
-	var eg = document.getElementsByName("eGDate").value
+	var sd = document.getElementsByName("sDate")[0].value
+	var ed = document.getElementsByName("eDate")[0].value
+	var sg = document.getElementsByName("SGoal")[0].value
+	var eg = document.getElementsByName("eGDate")[0].value
 	sendGoalRequest(sd, ed, sg, eg, "linear")
 }

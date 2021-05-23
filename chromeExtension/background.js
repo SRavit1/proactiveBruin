@@ -1,4 +1,5 @@
-window.id = generateID();
+//window.id = generateID();
+window.id = "test" //TODO: Inserted for DEBUG. Remove before testing.
 window.timeTable = {}
 
 chrome.browserAction.onClicked.addListener(function (tab) {
