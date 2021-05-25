@@ -19,8 +19,11 @@ app.use(bodyParser.json({ extended: true }));
 
 function updateDatabase(req, res) {
 	for (hostname in req.body.timeTable) {
-		let selectQuery = "SELECT * FROM " + req.body.id + " WHERE hostname=\"" + hostname + "\";";
+		let dateString = utils.getCurrDateString() //needed to compare with duplicates not on same day
+
+		let selectQuery = "SELECT * FROM " + req.body.id + " WHERE hostname=\"" + hostname + "\"" + " AND date=\"" + dateString + "\";"; //if on different day, it is counted again
 		console.log(selectQuery);
+
 
 		var selectQueryRes = sync_con.query(selectQuery)
 
@@ -32,7 +35,6 @@ function updateDatabase(req, res) {
 			res.end()
 		} else {
 			let date = new Date()
-			let dateString = utils.getCurrDateString()
 
 			let insertQuery = "INSERT INTO " + req.body.id + " (hostname, time, date) VALUES (\"" +
 				hostname + "\", " + req.body.timeTable[hostname] + ", \"" + dateString + "\");"
@@ -42,7 +44,6 @@ function updateDatabase(req, res) {
 
 	}
 }
-
 app.get('/', function (req, res) {
 	res.end("GET request to server")
 })
