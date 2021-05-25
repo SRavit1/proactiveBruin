@@ -2,7 +2,7 @@ Front End
 - Style: Goals table appears below stats --> visually unappealing
 - Get rid of Method=Productivity/Social Media, that's category
 	Method indicates how the goal tapers from start to end; currently "linear" is supported
-- Visualization says hours per day while displaying minutes per day
+- Display goal progress under goals tab (Use requestGoalData POST method)
 
 Back End
 - Add checks to ensure robust functionality

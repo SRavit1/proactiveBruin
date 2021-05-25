@@ -25,7 +25,7 @@ function listSiteData(siteData)
 	}
 
 	//add data from webserver
-	var screentimeData = [['Task', 'Hours per Day']];
+	var screentimeData = [['Task', 'Seconds per Day']];
 	var i = 0
 	for (i=0; i<sitename.length;i++){
 		screentimeData.push([sitename[i] , sitetime[i]])
@@ -141,7 +141,7 @@ function drawCategoryChart() {
 		}
 	}
 	var catData = [
-		['Task', 'Hours per Day'],
+		['Task', 'Seconds per Day'],
 		['Entertainment',     entertainmentnum],
 		['Productivity',      productivitynum],
 		['Shopping',  shoppingnum],
