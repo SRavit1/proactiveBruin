@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
       <h3><em>goals</em></h3>
       <!--<div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">dropdown <span class="caret"></span></button>
@@ -46,18 +46,7 @@
         </ul>
       </div>-->
     </div>
-    <div class="col-sm-6">
-      <h3><em>stats&nbsp;&nbsp;</em></h3>
-      <select class="statsselect" name="statsselect">
- 			 	  	<option value="">Select One...</option>
-  				  	<option value="Websites">Websites</option>
-  				  	<option value="Catagories">Catagories</option>
-  				  	<option value="Weekly Breakdown">Weekly Breakdown</option>
- 			 </select>
-      <div id="piechart" class="charts"> </div>
-	  <div id="barchart" class="charts"> </div>
-	<div id="result"></div>
-    </div>
+    
   </div>
   <div class="row">
     <div class="col-sm-6">
@@ -65,7 +54,7 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
-              <th>Method</th>
+              <th>Website</th>
               <th width="17%">Start Date</th>
               <th width="17%">End Date</th>
               <th width="17%">Start Goal</th>
@@ -95,18 +84,16 @@
       </fieldset>
       <div class="row" id="editGoal">
         <form name="myForm" class="form-horizontal" action="#">
-          <div class="form-group">
+          <!--div class="form-group">
             <div class="col-sm-6">
               <label class="control-label col-sm-4" for="pwd">Method:</label>
               <div class="col-sm-8">
                 <select class="form-control">
-				  	<option>Productivity</option>
-					<option>Entertainment</option>
-					<option>Shopping</option>
+				  	<option>linear</option>
 				  </select>
               </div>
             </div>
-          </div>
+          </div-->
 			<div class="form-group">
             <div class="col-sm-6">
               <label class="control-label col-sm-4" for="pwd">Start Date:</label>
@@ -153,21 +140,27 @@
       <p>Set Goal for social media use: &nbsp;</p>
       <p>Set Goal for _____ use: &nbsp;</p>-->
     </div>
-    <div class="col-sm-6">
-      <fieldset>
-		  
-		  
-		  
-		  
-				
-      </fieldset>
-    </div>
+    <div class="col-sm-6">&nbsp;ADD GOALS TABLE/GRAPH DISPLAY HERE</div>
+	  
   </div>
   <div class="row">
     <div class="col-sm-12">
+      <h3><em>stats&nbsp;&nbsp;</em></h3>
+ 
+      <div id="piechart" class="charts"> </div>
+	  <div id="barchart" class="charts"> </div>
+		<div id="result"></div>
+    	</div>
+    	<div class="col-sm-6">
+		  <select class="statsselect" name="statsselect">
+ 			 	  	<option value="">Select One...</option>
+  				  	<option value="Websites">Websites</option>
+  				  	<option value="Catagories">Catagories</option>
+  				  	<option value="Weekly Breakdown">Weekly Breakdown</option>
+ 			 </select> 
+    	</div>
       <p>&nbsp; </p>
     </div>
   </div>
-</div>
 </body>
 </html> 

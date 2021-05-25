@@ -27,14 +27,20 @@ body {
 }
 
 h3 {
-	
 	text-align: center;
 	text-shadow: 3px 3px #000000;
 	
 }
 
+.desc {
+	font-size: small;
+	text-align: center;
+	color: grey;
+}
+
 em {
 	color: white;
+	
 }
 
 p {
@@ -45,4 +51,5 @@ table a:hover{text-decoration: none;}
 table th{background:#034ea2;color:#f4cb01!important;font-weight:bold;}
 .form-horizontal .control-label{padding-right:0px!important}
 .btnRow{text-align:center;padding-top:20px;}
-.btnRow a{font-weight:bold;}
+.btnRow a{font-weight:bold;}.desc {
+}
