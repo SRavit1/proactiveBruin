@@ -86,7 +86,11 @@ Sample call:
 app.post('/requestData', function (req, res) {
 	console.log("requestData request to server")
 
-	let selectQuery = "SELECT * FROM " + req.body.id;
+	if(req.body.startDate==undefined)	//if no date range specified, select all data in table 
+		var selectQuery = "SELECT * FROM " + req.body.id;
+	else
+		var selectQuery = "SELECT * FROM " + req.body.id + " WHERE date >= \'" + req.body.startDate + "\' AND date <= \'" + req.body.endDate + "\'";
+	console.log(selectQuery)
 	let result = sync_con.query(selectQuery)
 	res.send(result)
 	res.end()
