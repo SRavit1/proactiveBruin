@@ -47,6 +47,16 @@ app.get('/', function (req, res) {
 	res.end("GET request to server")
 })
 
+/*
+Sample call:
+{
+  "id":"test",
+  "timeTable": {
+	"www.youtube.com": 10,
+	"www.google.com": 20
+  }
+}
+*/
 app.post('/sendData', function (req, res) {
 	console.log("sendData request to server")
 	console.log("timeTable is", req.body.timeTable)
@@ -66,6 +76,12 @@ app.post('/sendData', function (req, res) {
 	}
 })
 
+/*
+Sample call:
+{
+  "id":"test"
+}
+*/
 app.post('/requestData', function (req, res) {
 	console.log("requestData request to server")
 
@@ -135,7 +151,7 @@ app.post('/createGoal', function (req, res) {
 /*
 Sample call:
 {
-  "id":"testID",
+  "id":"test",
   "goal_id":"ibfloxk"
 }
 */
@@ -143,6 +159,15 @@ app.post('/deleteGoal', function (req, res) {
 	let deleteGoalQuery = "DELETE FROM " + req.body.id + "_goal WHERE goal_id=\"" + req.body.goal_id + "\";";
 	console.log(deleteGoalQuery)
 	sync_con.query(deleteGoalQuery)
+	res.end()
+})
+
+app.post('/requestGoalData', function (req, res) {
+	console.log("requestGoalData request to server")
+
+	let selectQuery = "SELECT * FROM " + req.body.id + "_goal;";
+	let result = sync_con.query(selectQuery)
+	res.send(result)
 	res.end()
 })
 
