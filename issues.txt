@@ -1,0 +1,11 @@
+Front End
+- Style: Goals table appears below stats --> visually unappealing
+- Get rid of Method=Productivity/Social Media, that's category
+	Method indicates how the goal tapers from start to end; currently "linear" is supported
+- Visualization says hours per day while displaying minutes per day
+
+Back End
+- Add checks to ensure robust functionality
+	- user ID and goal ID must be valid
+	- goal date range must be valid
+	- goal hostname must be valid
