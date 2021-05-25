@@ -78,7 +78,7 @@ app.post('/requestData', function (req, res) {
 /*
 Sample call:
 {
-  "id":"testID",
+  "id":"test",
   "hostname":"www.youtube.com",
   "startDate":"05-14-2021",
   "endDate":"05-21-2021",
@@ -99,8 +99,8 @@ app.post('/createGoal', function (req, res) {
 	startDateString = utils.getDateString(startDate)
 	endDateString = utils.getDateString(endDate)
 
-	startGoal = parseInt(req.body.startGoal)
-	endGoal = parseInt(req.body.endGoal)
+	startGoal = parseInt(req.body.startGoal)*60 //In seconds
+	endGoal = parseInt(req.body.endGoal)*60 //In seconds
 
 	days = Math.ceil((endDate-startDate)/(1000*60*60*24))
 
@@ -110,8 +110,8 @@ app.post('/createGoal', function (req, res) {
 
 	currDate = startDate
 	for (i = 0; i < days; i++) {
-		let createGoalQuery = "INSERT INTO " + req.body.id + "_goal (date, goal_id, hostname, timeTarget) VALUES " + 
-			"(\"" + utils.getDateString(currDate) + "\", \"" + goalID + "\", \"" + req.body.hostname + "\", " + targetTime[i] + ");"
+		let createGoalQuery = "INSERT INTO " + req.body.id + "_goal (date, goal_id, hostname, timeTarget, timeSpent) VALUES " + 
+			"(\"" + utils.getDateString(currDate) + "\", \"" + goalID + "\", \"" + req.body.hostname + "\", " + targetTime[i] + ", 0);"
 		console.log(createGoalQuery)
 
 		if (!(knownIds.includes(req.body.id))) {
