@@ -53,7 +53,7 @@ app.post('/sendData', function (req, res) {
 
 	if (!(knownIds.includes(req.body.id))) {
 		let createDataTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + " (hostname VARCHAR(255), time INT, date DATE);"
-		let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), timeTarget INT, timeSpent INT)";
+		let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), hostname VARCHAR(255), timeTarget INT, timeSpent INT)";
 		
 		sync_con.query(createDataTableQuery)
 		sync_con.query(createGoalTableQuery)
@@ -79,6 +79,7 @@ app.post('/requestData', function (req, res) {
 Sample call:
 {
   "id":"testID",
+  "hostname":"www.youtube.com",
   "startDate":"05-14-2021",
   "endDate":"05-21-2021",
   "startGoal":60,
@@ -103,18 +104,18 @@ app.post('/createGoal', function (req, res) {
 
 	days = Math.ceil((endDate-startDate)/(1000*60*60*24))
 
-	console.log("Create goal with id", goalID, "from", startDateString, "to", endDateString, "lasting ", days, "days and going from", startGoal, "to", endGoal, "minutes with", req.body.method, "method.")
+	console.log("Create goal with id", goalID, "for website", req.body.hostname, "from", startDateString, "to", endDateString, "lasting ", days, "days and going from", startGoal, "to", endGoal, "minutes with", req.body.method, "method.")
 
 	targetTime = utils.getGoalTargets(days, startGoal, endGoal, req.body.method)
 
 	currDate = startDate
 	for (i = 0; i < days; i++) {
-		let createGoalQuery = "INSERT INTO " + req.body.id + "_goal (date, goal_id, timeTarget) VALUES " + 
-			"(\"" + utils.getDateString(currDate) + "\",\"" + goalID + "\", " + targetTime[i] + ");"
+		let createGoalQuery = "INSERT INTO " + req.body.id + "_goal (date, goal_id, hostname, timeTarget) VALUES " + 
+			"(\"" + utils.getDateString(currDate) + "\", \"" + goalID + "\", \"" + req.body.hostname + "\", " + targetTime[i] + ");"
 		console.log(createGoalQuery)
 
 		if (!(knownIds.includes(req.body.id))) {
-			let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), timeTarget INT, timeSpent INT)";
+			let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), hostname VARCHAR(255), timeTarget INT, timeSpent INT)";
 			console.log(createGoalTableQuery)
 
 			sync_con.query(createGoalTableQuery)
