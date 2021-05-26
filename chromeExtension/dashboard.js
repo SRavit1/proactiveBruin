@@ -317,7 +317,45 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 
+document.addEventListener('DOMContentLoaded', populateTable, false)
 
+function populateTable(){	//rn this justs get the values stored in the mysql table
+	google.charts.load('current', {'packages':['corechart']});
+
+	var done = false
+	const bg = chrome.extension.getBackgroundPage()
+
+
+	var xhr = new XMLHttpRequest()
+	xhr.open("POST", "http://localhost:3000/requestGoalData")
+	xhr.setRequestHeader("Content-Type", "application/json")
+
+	xhr.send(JSON.stringify({"id":bg.id}))
+	xhr.onreadystatechange = function() {
+		if (!done) {
+			let returnData = xhr.responseText.trim()
+			if (returnData === "") return
+			goalDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
+			console.log(goalDataText)
+			goalData = JSON.parse(goalDataText)["key_val"]
+
+			console.log(goalData)
+
+			done = true
+		}
+		var allGoals = [[]] //will contain all elements of goal
+			for(goal in goalData){//NOTE: rn it doubles everything, not sure why 
+				allGoals.push([goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]])
+				// this will print the contents of the goal table
+				/*const div = document.createElement('div')
+				console.log(goalData[goal])
+				div.textContent = goalData[goal]["date"] + " " + goalData[goal]["goal_id"] + " " + goalData[goal]["hostname"] + " " + goalData[goal]["timeTarget"] + " " + goalData[goal]["timeSpent"]
+				document.body.appendChild(div)*/
+				
+			}
+
+	}
+}
 
 //websites in each category
 var Entertainment =[
