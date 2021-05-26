@@ -29,7 +29,7 @@ function updateDatabase(req, res) {
 
 		if (selectQueryRes.length > 0) {
 			let updatedTime = selectQueryRes[0]["time"] + req.body.timeTable[hostname];
-			let updateQuery = "UPDATE " + req.body.id + " SET time=" + updatedTime + " WHERE hostname=\"" + hostname + "\";";
+			let updateQuery = "UPDATE " + req.body.id + " SET time=" + updatedTime + " WHERE hostname=\"" + hostname + "\" AND date=\"" + dateString + "\";";
 			console.log(updateQuery)
 			sync_con.query(updateQuery)
 			res.end()
