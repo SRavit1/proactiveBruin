@@ -39,6 +39,57 @@ function listSiteData(siteData, checkDupes)
 	return screentimeData;
 }
 
+function historyFormat(siteData)
+{
+	var data = new google.visualization.DataTable();
+
+	var sitenames = [];
+	var sitedates = [];
+
+	data.addColumn('string', 'date');
+	//add unique site names
+	for (site in siteData){
+		var tempName = String(siteData[site]["hostname"]);
+		var tempDate = String(siteData[site]["date"]).substring(0,10);//format example: "2021-05-25T04:00:00.000Z", or "YYYY-MM-DDTO...."
+		if (!sitenames.includes(tempName))
+			sitenames.push(tempName);
+		
+		if (!sitedates.includes(tempDate))
+			sitedates.push(tempDate);
+		
+	}
+	//sort sitedates in ascending order
+	sitedates.sort();
+
+	//add columns corresponding to each site name
+	sitenames.forEach(sName => data.addColumn('number',sName));
+	console.log(data);
+
+	//for each date, add row in format: [date, site1time, site2time, ...]
+	sitedates.forEach(function(curDate,index) {
+		var newRow = new Array(sitenames.length).fill(0); //declare an array filled with zeroes
+		var date = [curDate];
+		
+		//find all the sites visited that day, and add to the row
+		for (site in siteData){
+			var tempDate = String(siteData[site]["date"]).substring(0,10);
+			var tempName = String(siteData[site]["hostname"]);
+			var tempTime = Number(siteData[site]["time"]);
+			if (curDate === tempDate) //check that it's the correct day
+			{
+				newRow[sitenames.indexOf(tempName)] = tempTime; //update time
+				//console.log(tempName + " has " + tempTime + " minutes");	
+			}
+		}
+		newRow = date.concat(newRow);
+
+		console.log(newRow);
+		data.addRow(newRow);
+		console.log(data);
+	});
+
+	return data;
+}
 
 function drawCharts(siteData) {
 
@@ -58,15 +109,17 @@ function drawCharts(siteData) {
 	var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
 	barchart.draw(data, barchart_options); //TODO: Make this more readable with only top websites ()
 
-	/* //linechart
+	//linechart
 	//Note: here you would put true for listSiteData so dupes are not added together
-	//TODO: get data as function of time
+	data = historyFormat(siteData);
 	var linechart_options = {
-		title: "Line Chart: My Monthly Screentime",
-		curveType: 'function'
+		title: "Line Chart: My Daily Screentime",
+		curveType: 'function',
+		legend: {position: 'bottom'},
+		vAxis: {viewWindow:{min: 0} }
 	};
 	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
-	linechart.draw(data, linechart_options); */
+	linechart.draw(data, linechart_options); 
 
 }
 
