@@ -17,6 +17,7 @@ function listSiteData(siteData, checkDupes)
 	var temp = ""
 	for (site in siteData){
 		temp = String(siteData[site]["hostname"])
+		if(temp == extensionid) temp="ProactiveBruin";
 		if (!sitename.includes(temp) || !checkDupes){ //for use in line charts will not add duplicate hostnames on different days
 			sitename.push(temp)
 			sitetime.push(Number(siteData[site]["time"]))
