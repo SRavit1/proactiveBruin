@@ -1,8 +1,13 @@
 Front End
-- Style: Goals table appears below stats --> visually unappealing
-- Get rid of Method=Productivity/Social Media, that's category
+- Style: Goals table appears below stats --> visually unappealing --- RESOLVED
+- Get rid of Method=Productivity/Social Media, that's category --- RESOLVED
 	Method indicates how the goal tapers from start to end; currently "linear" is supported
+	
 - Display goal progress under goals tab (Use requestGoalData POST method)
+	5/27 - tbd:
+	- fix the data display entries within the table
+	- actually display form input entry
+	- content security policy issue
 
 Back End
 - Add checks to ensure robust functionality
