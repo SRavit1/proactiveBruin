@@ -5,7 +5,7 @@
 body {
     /*background: linear-gradient(-90deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);*/
 	/*background: linear-gradient(-90deg, #f4cb01, #0095ff, #f4cb01, #0095ff, #f4cb01, #0095ff);*/
-	background: linear-gradient(-90deg, #f4cb01, #0095ff);
+	background: linear-gradient(-90deg, #2D68C4, #F2A900);
 	position: relative;
 	background-size: 125%;
 }
@@ -24,6 +24,8 @@ body {
 	margin: auto;
 	width: 30%;
 	padding: 5px 10px;
+	background: linear-gradient(-90deg, #F2A900, #2D68C4);
+	background-size: 110%;
 }
 
 h3 {
@@ -33,10 +35,15 @@ h3 {
 }
 
 .desc {
-	font-size: small;
+	font-size: medium;
 	text-align: center;
-	color: grey;
+	color: white;
+	text-shadow: 2px 1px black;
+	text-decoration-color: grey;
+	font-style: oblique;
+	font-weight: 400;
 }
+
 
 em {
 	color: white;
@@ -52,4 +59,10 @@ table th{background:#034ea2;color:#f4cb01!important;font-weight:bold;}
 .form-horizontal .control-label{padding-right:0px!important}
 .btnRow{text-align:center;padding-top:20px;}
 .btnRow a{font-weight:bold;}.desc {
+}
+
+#directions {
+	font-style: normal;
+	background: repeating-linear-gradient(#fff);
+	font-size: small;
 }

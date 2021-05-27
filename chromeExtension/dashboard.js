@@ -327,6 +327,7 @@ function populateTable(){	//rn this justs get the values stored in the mysql tab
 	const bg = chrome.extension.getBackgroundPage()
 
 
+
 	var xhr = new XMLHttpRequest()
 	xhr.open("POST", "http://localhost:3000/requestGoalData")
 	xhr.setRequestHeader("Content-Type", "application/json")
@@ -335,6 +336,7 @@ function populateTable(){	//rn this justs get the values stored in the mysql tab
 	xhr.onreadystatechange = function() {
 		if (!done) {
 			let returnData = xhr.responseText.trim()
+			console.log("hellooooo "+xhr.responseText.trim())
 			if (returnData === "") return
 			goalDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
 			console.log(goalDataText)
@@ -354,6 +356,8 @@ function populateTable(){	//rn this justs get the values stored in the mysql tab
 				document.body.appendChild(div)*/
 				
 			}
+			console.log("all goals "+allGoals)
+			
 
 	}
 }
