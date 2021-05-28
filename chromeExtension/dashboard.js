@@ -5,7 +5,8 @@ var globsiteData
 var extensionid = chrome.runtime.id	//32 char id given to each extension 
 var dateRangeData
 var useDateRangeSwitch = false //keeps track of whether to use dateRangeData or globsiteData
-
+var globCategoriesHostname
+var globCategoriesCategory
 
 
 function listSiteData(siteData, checkDupes)
@@ -180,32 +181,29 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 function drawCategoryChart() {
-	//TODO: there's lots of similar parts, so refactoring later might be a good idea
+	
 	var entertainmentnum = 0
 	var productivitynum = 0
 	var othernum = 0
 	var shoppingnum = 0
 	var data
-
 	if(!useDateRangeSwitch)
 		data = listSiteData(globsiteData, true)
 	else 
 		data = listSiteData(dateRangeData, true)
-	for (i=1; i<data.length; i++){
-		temp = data[i][0]
 
-		if(Entertainment.includes(temp)){
-			entertainmentnum+=Number(data[i][1])
+	for (i=1; i<data.length; i++){
+		temp = String(data[i][0]).trim()
+		if(globCategoriesHostname.includes(temp)){
+			if(globCategoriesCategory[globCategoriesHostname.indexOf(temp)].trim() === "Entertainment")
+				entertainmentnum += data[i][1]
+			else if(globCategoriesCategory[globCategoriesHostname.indexOf(temp)].trim() === "Productivity")
+				productivitynum+=data[i][1]
+			else if(globCategoriesCategory[globCategoriesHostname.indexOf(temp)].trim() === "Shopping")
+				shoppingnum+=data[i][1]
 		}
-		else if(Productivity.includes(temp)){
-			productivitynum+=Number(data[i][1])
-		}
-		else if(Shopping.includes(temp)){
-			shoppingnum+=Number(data[i][1])
-		}
-		else{
-			othernum+=Number(data[i][1])
-		}
+		else 
+			othernum+=data[i][1]
 	}
 	var catData = [
 		['Task', 'Hours per Day'],
@@ -269,7 +267,7 @@ function getDateRange(start, end){
 			console.log(siteDataText)
 			siteData = JSON.parse(siteDataText)["key_val"]
 
-			google.charts.setOnLoadCallback(drawCharts(siteData));
+			//google.charts.setOnLoadCallback(drawCharts(siteData));
 			dateRangeData = siteData
 			done = true
 		}
@@ -318,76 +316,62 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 
-document.addEventListener('DOMContentLoaded', populateTable, false)
+document.addEventListener('DOMContentLoaded', getCategoryTable, false)
 
-function populateTable(){	//rn this justs get the values stored in the mysql table
-	google.charts.load('current', {'packages':['corechart']});
-
+function getCategoryTable(){
 	var done = false
 	const bg = chrome.extension.getBackgroundPage()
 
-
-
 	var xhr = new XMLHttpRequest()
-	xhr.open("POST", "http://localhost:3000/requestGoalData")
+	xhr.open("POST", "http://localhost:3000/requestCatData")
 	xhr.setRequestHeader("Content-Type", "application/json")
+
 
 	xhr.send(JSON.stringify({"id":bg.id}))
 	xhr.onreadystatechange = function() {
 		if (!done) {
 			let returnData = xhr.responseText.trim()
-			console.log("hellooooo "+xhr.responseText.trim())
 			if (returnData === "") return
-			goalDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
-			console.log(goalDataText)
-			goalData = JSON.parse(goalDataText)["key_val"]
+			catDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
+			catData = JSON.parse(catDataText)["key_val"]
 
-			console.log(goalData)
+			console.log(catData)
 
 			done = true
+			CategoriestoArray(catData)
 		}
-		var allGoals = [[]] //will contain all elements of goal
-			for(goal in goalData){//NOTE: rn it doubles everything, not sure why 
-				allGoals.push([goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]])
-				// this will print the contents of the goal table
-				const div = document.createElement('div')
-				console.log(goalData[goal])
-				div.textContent = goalData[goal]["date"] + " " + goalData[goal]["goal_id"] + " " + goalData[goal]["hostname"] + " " + goalData[goal]["timeTarget"] + " " + goalData[goal]["timeSpent"]
-				document.body.appendChild(div)
-				
-			}
-			console.log("all goals "+allGoals)
-			
-
-			return allGoals;
 	}
 }
 
-//websites in each category
-var Entertainment =[
-"www.youtube.com",
-"www.netflix.com",
-"www.hulu.com",
-"www.twitch.tv",
-"www.disneyplus.com",
-"www.primeivideo.com",
-"www.xfinity.com",
-"www.hbomax.com"
-]
 
-var Productivity = [
-"accounts.google.com",
-"drive.google.com",
-"ccle.ucla.edu",
-"mail.google.com",
-"www.google.com",
-"stackoverflow.com",
-"libgen.is",
-"extensions",
-"ProactiveBruin"
-]
+function CategoriestoArray(data){
+	tempHostname = []
+	tempCategory = []
+	for(site in data){
+		hostname = data[site]["hostname"]
+		category = data[site]["category"]
+		tempHostname.push(hostname)
+		tempCategory.push(category)
+	}
+	globCategoriesHostname = tempHostname
+	globCategoriesCategory = tempCategory
+}
 
-var Shopping = [
-"www.target.com",
-"www.amazon.com"
-]
+
+function resetCatTable(){
+	const bg = chrome.extension.getBackgroundPage()
+
+	var xhr = new XMLHttpRequest()	//clears cat table
+	xhr.open("POST", "http://localhost:3000/clearCat")
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.send(JSON.stringify({"id":bg.id}))
+
+	var xhr = new XMLHttpRequest()	//fills cat table with preset vals
+	xhr.open("POST", "http://localhost:3000/fillCat")
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.send(JSON.stringify({"id":bg.id}))
+
+	drawCategoryChart();
+}
+
+
