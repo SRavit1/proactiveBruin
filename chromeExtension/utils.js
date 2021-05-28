@@ -1,6 +1,6 @@
 var background_window = chrome.extension.getBackgroundPage().window
 //document.getElementById("sendGoalButton").addEventListener("click", processGoalRequest);
-//document.getElementById("refreshGoals").addEventListener("click", processGoalRequest);
+//document.getElementById("refreshGoals").addEventListener("click", goalsTable());
 
 //Taken from: https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string
 //TODO: Check if we are allowed to use this function or if we must replace it
@@ -60,19 +60,41 @@ function sendGoalRequest(startDate, endDate, startGoal, endGoal, hostname, metho
 function processGoalRequest()
 {
     console.log("calling processGoalRequest")
+    var h = document.getElementsByName("hostn")[0].value
     var sd = document.getElementsByName("sDate")[0].value
+    console.log("yooo"+sd)
 	var ed = document.getElementsByName("eDate")[0].value
 	var sg = document.getElementsByName("SGoal")[0].value
 	var eg = document.getElementsByName("eGDate")[0].value
-	var h = document.getElementsByName("hostn")[0].value
+	//var h = document.getElementsByName("hostn")[0].value
 	sendGoalRequest(sd, ed, sg, eg, h, "linear")
+    return h
+}
+
+function getHost ()
+{
+    var h = document.getElementsByName("hostn")[0].value
+    return h
+}
+
+function deleteGoalRequest(goal_id) {
+    var createGoalReq = {
+        "goal_id": goal_id//how do i access the goal id?
+    }
+
+    var xhr = new XMLHttpRequest()
+    xhr.open("POST", "http://localhost:3000/deleteGoal")
+    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.send(JSON.stringify(createGoalReq))
+    console.log("Checking value"+createGoalReq)
+
+    console.log("sending delete goal request")
 }
 
 
 $(() => {
-    $('#sendGoalButton').on('click', (e)=>{
-        processGoalRequest();
-    });
+    
     $('#refreshGoals').on('click', (e)=>{
         var done = false
         const bg = chrome.extension.getBackgroundPage()
@@ -106,13 +128,37 @@ $(() => {
                     { title: "End Date", data: 'date'},
                     { title: "Start Goal", data: 'timeSpent' },
                     { title: "End Goal", data: 'timeTarget' },
+                    { title: "Goal", data: 'goal_id' },
                     { title: "Edit" }
                 ]
             });
+            var t = $('#goals').DataTable();
+            $('#sendGoalButton').on('click', (e)=>{
+                processGoalRequest();
+                t.row.add( [
+                    { title: "Website" , data: getHost()}
+                ] ).draw( false );
+            });
+            $('#goals tbody').on( 'click', 'tr', function () {
+                if ( $(this).hasClass('selected') ) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    t.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            } );
+         
+            $('#button').click( function () {
+                t.row('.selected').remove().draw( false );
+                deleteGoalRequest(goal_id);
+            } );
         }catch(e){
             // TODO: troubleshoot
         }
-    }
+        console.log("entered" + getHost())
+        
     }        //processGoalRequest();
-    });
+    }
+});
 })

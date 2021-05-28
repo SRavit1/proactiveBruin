@@ -350,15 +350,16 @@ function populateTable(){	//rn this justs get the values stored in the mysql tab
 			for(goal in goalData){//NOTE: rn it doubles everything, not sure why 
 				allGoals.push([goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]])
 				// this will print the contents of the goal table
-				/*const div = document.createElement('div')
+				const div = document.createElement('div')
 				console.log(goalData[goal])
 				div.textContent = goalData[goal]["date"] + " " + goalData[goal]["goal_id"] + " " + goalData[goal]["hostname"] + " " + goalData[goal]["timeTarget"] + " " + goalData[goal]["timeSpent"]
-				document.body.appendChild(div)*/
+				document.body.appendChild(div)
 				
 			}
 			console.log("all goals "+allGoals)
 			
 
+			return allGoals;
 	}
 }
 
