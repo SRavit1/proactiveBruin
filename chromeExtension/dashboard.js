@@ -104,24 +104,68 @@ function drawCharts(siteData) {
 	var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
 	piechart.draw(data, piechart_options);
 
-	//barchart
+	//barchart - show only top N
+	var bardata = data.clone();
+	const selectTopWebsiteNum = 5;
+	bardata.removeRows(selectTopWebsiteNum,bardata.getNumberOfRows()-selectTopWebsiteNum);
 	var barchart_options = {
-		title: 'Bar Chart: My Daily Screentime'
+		title: 'Bar Chart: My Daily Top '+selectTopWebsiteNum +' Viewed Websites'
 	}
 	var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
-	barchart.draw(data, barchart_options); //TODO: Make this more readable with only top websites ()
+	barchart.draw(bardata, barchart_options); //TODO: Make this more readable with only top websites ()
 
 	//linechart
 	//Note: here you would put true for listSiteData so dupes are not added together
 	data = historyFormat(siteData);
 	var linechart_options = {
-		title: "Line Chart: My Daily Screentime",
+		title:'Line Chart: My Daily Screentime',
 		curveType: 'function',
 		legend: {position: 'bottom'},
 		vAxis: {viewWindow:{min: 0} }
 	};
 	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
 	linechart.draw(data, linechart_options); 
+
+}
+
+function drawProgressChart(allGoals)
+{
+	//create progress bars in div id="progresscharts"
+	var chartElement = document.getElementById("progresscharts");
+	
+	//first, sort by % amount completed
+	goalData.sort(function(a,b) {
+		//in the form [goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]]
+		var a_percent = a[4] / a[3];
+		var b_percent = b[4] / b[3];
+		return b_percent-a_percent;
+	});
+
+	//then, create a div element for each goal, and append
+	allGoals.forEach(function(goal,index){
+		var node = document.createElement("div");
+		node.setAttribute("id", "donutchart"+index);
+		chartElement.appendChild(node);
+	});
+
+	//now, create graph
+	allGoals.forEach(function(goal,index){
+		var percent = goal[4] / goal[3];
+		var data = google.visualization.arrayToDataTable([
+			["progress", "amount"],
+			["time spent",goal[4]],
+			["", goal[3]-goal[4]]
+		]);
+
+		var options = {
+			title: "Progress on: " + goal[2],
+			pieHole: 0.4
+		}
+		
+		var chart = new google.visualization.PieChart(document.getElementById('donutchart'+index));
+		chart.draw(data,options);
+	});
+
 
 }
 
