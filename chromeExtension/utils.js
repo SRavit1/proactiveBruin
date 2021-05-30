@@ -76,28 +76,41 @@ function getHost ()
     var h = document.getElementsByName("hostn")[0].value
     return h
 }
-
+var t = null;
+const bg = chrome.extension.getBackgroundPage();
 function deleteGoalRequest(goal_id) {
     var createGoalReq = {
-        "goal_id": goal_id//how do i access the goal id?
+        "id": bg.id,
+        "goal_id": goal_id //how do i access the goal id?
     }
-
+    var done = false
     var xhr = new XMLHttpRequest()
     xhr.open("POST", "http://localhost:3000/deleteGoal")
     xhr.setRequestHeader("Content-Type", "application/json")
 
-    xhr.send(JSON.stringify(createGoalReq))
+    xhr.send(JSON.stringify(createGoalReq));
+
+    xhr.onreadystatechange = function() {
+		if (!done) {
+            let returnData = xhr.responseText.trim()
+			if (returnData === "") return
+			
+			done = true;
+            refreshData();
+        }
+    }
     console.log("Checking value"+createGoalReq)
 
     console.log("sending delete goal request")
 }
 
+function dateFormat(data, type, row) { 
+    return data ? new Date(data).toLocaleDateString() : '';
+}
 
-$(() => {
-    
-    $('#refreshGoals').on('click', (e)=>{
+function refreshData(){
         var done = false
-        const bg = chrome.extension.getBackgroundPage()
+        
         var xhr = new XMLHttpRequest()
 	xhr.open("POST", "http://localhost:3000/requestGoalData")
 	xhr.setRequestHeader("Content-Type", "application/json")
@@ -120,39 +133,37 @@ $(() => {
             //call here to get the data
             try{
                 
-            $('#goals').DataTable({
-                data: siteData,
-                columns: [
-                    { title: "Website" , data: 'hostname'},
-                    { title: "Start Date", data: 'date'},
-                    { title: "End Date", data: 'date'},
-                    { title: "Start Goal", data: 'timeSpent' },
-                    { title: "End Goal", data: 'timeTarget' },
-                    { title: "Goal", data: 'goal_id' },
-                    { title: "Edit" }
-                ]
-            });
-            var t = $('#goals').DataTable();
-            $('#sendGoalButton').on('click', (e)=>{
-                processGoalRequest();
-                t.row.add( [
-                    { title: "Website" , data: getHost()}
-                ] ).draw( false );
-            });
-            $('#goals tbody').on( 'click', 'tr', function () {
-                if ( $(this).hasClass('selected') ) {
-                    $(this).removeClass('selected');
-                }
-                else {
-                    t.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                }
-            } );
-         
-            $('#button').click( function () {
-                t.row('.selected').remove().draw( false );
-                deleteGoalRequest(goal_id);
-            } );
+                //var t = $('#goals').DataTable();
+                if($.fn.dataTable.isDataTable("#goals")) {
+                    t.clear();
+                    t.rows.add(siteData);
+                    t.draw();
+                } else {
+                    t = $('#goals').DataTable({
+                        data: siteData,
+                        columns: [
+                            { title: "Website" , data: 'hostname'},
+                            { title: "Start Date", data: 'date' , render: dateFormat},
+                            { title: "End Date", data: 'date' , render: dateFormat},
+                            { title: "Start Goal", data: 'timeSpent' },
+                            { title: "End Goal", data: 'timeTarget' },
+                            { title: "Goal", data: 'goal_id' }
+                            //{ title: "Edit" }
+                        ]
+                    });
+                    $('#goals tbody').on( 'click', 'tr', function () {
+        
+                        //var t = $('#goals').DataTable();
+                        if ( $(this).hasClass('selected') ) {
+                            $(this).removeClass('selected');
+                        }
+                        else {
+                            t.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+                    });
+            }
+            
         }catch(e){
             // TODO: troubleshoot
         }
@@ -160,5 +171,30 @@ $(() => {
         
     }        //processGoalRequest();
     }
+}
+
+$(() => {
+    $('#refreshGoals').on('click', (e)=>{
+        refreshData();
+    });  
+    $('#button').click( function () {
+        var goal_id = null;
+        //var t = $('#goals').DataTable();
+        var row = t.row('.selected');
+        if(!row || !row.data()) { alert('Error: row is not selected'); return; }
+        goal_id = row.data().goal_id;
+        if(!goal_id) { alert('Error: goal id is not selected'); return; }
+
+        row.remove().draw( false );
+        
+        deleteGoalRequest(goal_id);
+    } );
+    $('#sendGoalButton').on('click', (e)=>{
+        //var t = $('#goals').DataTable();
+        processGoalRequest();
+        t.row.add( [
+            { title: "Website" , data: getHost()}
+        ] ).draw( false );
+    });
+    refreshData();
 });
-})
