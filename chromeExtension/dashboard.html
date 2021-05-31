@@ -28,124 +28,123 @@
 </head>
 
 <body>
-
-<div class="container">
-  <div id="titleBox" class="row">
-    <h1 id="title">proactive bruin </h1>
-  </div>
-  <div id="goalBox" class="row box">
-      <div class="col-sm-12">
-        <h3><em>goals</em></h3>
-        <h4 class="desc">create and track your screentime goals!</h4>
-      </div>
-     <div  class="col-sm-6" style="width:50vw">
-      <h4 class="desc" id="directions">
-        add the website you would like to track! provide the date you would like to start tracking your goal and the date you wish to achieve your goal. then, add your starting alotted time and your goal screentime for the particular website by the end date.
-      </h4>
-      <fieldset>
-        <button class="btn btn-primary" id="button">Delete selected goal</button>
-        <table id="goals" class="display" style="width:100%">
-          
-        </table>
-
-      <button class="btn btn-primary" id="refreshGoals">Refresh <i class="fa fa-refresh"></i></button>
-
-      </fieldset>
-        <form name="myForm" class="form-horizontal" action="#">
-
-      <div class="form-group">
+  <div class="container">
+    <div id="titleBox" class="row">
+      <h1 id="title">proactive bruin </h1>
+    </div>
+    <div id="goalBox" class="row box">
         <div class="col-sm-12">
-          
-          <label class="control-label col-sm-4" for="pwd">Website:</label>
-          <div class="col-sm-8">
-            <input type="text" id="hostn" name="hostn"  class="form-control">
-          </div>
+          <h3><em>goals</em></h3>
+          <h4 class="desc">create and track your screentime goals!</h4>
         </div>
-        <div class="col-sm-12">&nbsp;</div>
-            <div class="col-sm-6">
-              
-              <label class="control-label col-sm-4" for="pwd">Start Date:</label>
-              <div class="col-sm-8">
-                <input type="date" id="sDate" name="sDate"  class="form-control">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <label class="control-label col-sm-4" for="pwd">End Date:</label>
-              <div class="col-sm-8">
-                <input type="date" id="eDate" name="eDate"  class="form-control">
-              </div>
+       <div  class="col-sm-6" style="width:50vw">
+        <h4 class="desc" id="directions">
+          add the website you would like to track! provide the date you would like to start tracking your goal and the date you wish to achieve your goal. then, add your starting alotted time and your goal screentime for the particular website by the end date.
+        </h4>
+        <fieldset>
+          <button class="btn btn-primary" id="button">Delete selected goal</button>
+          <table id="goals" class="display" style="width:100%">
+            
+          </table>
+
+        <button class="btn btn-primary" id="refreshGoals">Refresh <i class="fa fa-refresh"></i></button>
+
+        </fieldset>
+          <form name="myForm" class="form-horizontal" action="#">
+
+        <div class="form-group">
+          <div class="col-sm-12">
+            
+            <label class="control-label col-sm-4" for="pwd">Website:</label>
+            <div class="col-sm-8">
+              <input type="text" id="hostn" name="hostn"  class="form-control">
             </div>
           </div>
-      <div class="form-group">
-            <div class="col-sm-6">
-              <label class="control-label col-sm-4" for="pwd">Start Goal:</label>
-              <div class="col-sm-8">
-                <input type="text"  name="SGoal"  class="form-control" placeholder="enter start time alotted">
+          <div class="col-sm-12">&nbsp;</div>
+              <div class="col-sm-6">
+                
+                <label class="control-label col-sm-4" for="pwd">Start Date:</label>
+                <div class="col-sm-8">
+                  <input type="date" id="sDate" name="sDate"  class="form-control">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label col-sm-4" for="pwd">End Date:</label>
+                <div class="col-sm-8">
+                  <input type="date" id="eDate" name="eDate"  class="form-control">
+                </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <label class="control-label col-sm-4" for="pwd">End Goal:</label>
-              <div class="col-sm-8">
-                <input type="text" id="eGDate" name="eGDate"  class="form-control" placeholder="enter end screentime goal">
+        <div class="form-group">
+              <div class="col-sm-6">
+                <label class="control-label col-sm-4" for="pwd">Start Goal:</label>
+                <div class="col-sm-8">
+                  <input type="text"  name="SGoal"  class="form-control" placeholder="enter start time alotted">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label col-sm-4" for="pwd">End Goal:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="eGDate" name="eGDate"  class="form-control" placeholder="enter end screentime goal">
+                </div>
               </div>
             </div>
-          </div>
-      <div class="form-group btnRow">
-        <button class="btn btn-primary" id="sendGoalButton">Save</button>
-        <button class="btn btn-primary">Cancel</button>
-      </div>
-        </form>
-      </div>
+        <div class="form-group btnRow">
+          <button class="btn btn-primary" id="sendGoalButton">Save</button>
+          <button class="btn btn-primary">Cancel</button>
+        </div>
+          </form>
+        </div>
 
+      </div>
+      <div class="col-sm-6">&nbsp;
+       <div id="progresscharts"> </div>
     </div>
-    <div class="col-sm-6">&nbsp;
-     <div id="progresscharts"> </div>
-  </div>
-  <div id="statsBox" class="row box">
-    <div class="col-sm-12">
-      <h3><em>stats&nbsp;&nbsp;</em></h3>
-      <h4 class="desc">view your screentime stats!</h4>
- 
-      <div id="piechart" class="charts"> </div>
-      <div id="barchart" class="charts"> </div>
-      <div id="linechart" class ="charts"> </div>
-      <div id="result"></div>
-    </div>
-    <nobr>
-    <div class="col-sm-6">
-      Stats shown:
-      <select class="statsselect" name="statsselect" id="statsselect">
-              <option value="Websites">Websites</option>
-              <option value="Catagories">Catagories</option>
-       </select> 
-       <br>
-       Interact with a categorized site:
-       <input type="text" id="websiteString">
-       <button class="btn btn-primary" id="searchCat">Search</button>
-       <button class="btn btn-primary" id="addCat">Add</button>
-       <button class="btn btn-primary" id="deleteCat">Delete</button>
-       <button class="btn btn-primary" id="updateCat">Update</button>
-       <br>
+    <div id="statsBox" class="row box">
+      <div class="col-sm-12">
+        <h3><em>stats&nbsp;&nbsp;</em></h3>
+        <h4 class="desc">view your screentime stats!</h4>
+   
+        <div id="piechart" class="charts"> </div>
+        <div id="barchart" class="charts"> </div>
+        <div id="linechart" class ="charts"> </div>
+        <div id="result"></div>
+      </div>
+      <nobr>
+      <div class="col-sm-6">
+        Stats shown:
+        <select class="statsselect" name="statsselect" id="statsselect">
+                <option value="Websites">Websites</option>
+                <option value="Catagories">Catagories</option>
+         </select> 
+         <br>
+         Interact with a categorized site:
+         <input type="text" id="websiteString">
+         <button class="btn btn-primary" id="searchCat">Search</button>
+         <button class="btn btn-primary" id="addCat">Add</button>
+         <button class="btn btn-primary" id="deleteCat">Delete</button>
+         <button class="btn btn-primary" id="updateCat">Update</button>
+         <br>
 
-      <div>
-        Clear All Categories: 
-        <button class="btn btn-primary" id="clearCat">Clear</button>
-        <br> <br>
-        Reset Categories to Default:
-        <button class="btn btn-primary" id="resetCat">Reset</button>
-        <br> <br>
-        Refresh Categories Graph:
-        <button class="btn btn-primary" id="refreshCat">Refresh</button>
+        <div>
+          Clear All Categories: 
+          <button class="btn btn-primary" id="clearCat">Clear</button>
+          <br> <br>
+          Reset Categories to Default:
+          <button class="btn btn-primary" id="resetCat">Reset</button>
+          <br> <br>
+          Refresh Categories Graph:
+          <button class="btn btn-primary" id="refreshCat">Refresh</button>
+        </div>
+        <br>
+        <div>
+          Add a date range to stats:
+          <button class="btn btn-primary" id="myBtn">Add Date Range</button>
+        </div>
       </div>
-      <br>
-      <div>
-        Add a date range to stats:
-        <button class="btn btn-primary" id="myBtn">Add Date Range</button>
+      </nobr>
+        <p>&nbsp; </p>
       </div>
     </div>
-    </nobr>
-      <p>&nbsp; </p>
-    </div>
-  </div>
 </body>
 </html> 

@@ -146,7 +146,6 @@ function drawProgressChart(allGoals)
 	chartElement.setAttribute("style","width:100vw");
 
 	//update with correct time spent on each website TODO: ideally masterScript/updateGoals.js should do this later
-	console.log("globSiteData" + globsiteData)
 	allGoals.forEach(function(goal,index){
 		var hostname = goal[2];
 		

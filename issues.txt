@@ -13,6 +13,7 @@ Front End
 - rewrite strip hostname function
 - cleanup html and js
 - organize default categories into json file
+- goal display issue
 
 - When the user adds a date range, to see the change you have to cycle the dropdown (click categories then websites again) for the graphs to update
 
