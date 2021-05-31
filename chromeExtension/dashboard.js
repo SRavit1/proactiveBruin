@@ -1,15 +1,18 @@
 background_window = chrome.extension.getBackgroundPage().window
 
 //keeps stores site data and cleaned data for global use
-var globsiteData
+var globsiteData 
 var extensionid = chrome.runtime.id	//32 char id given to each extension 
 var dateRangeData
 var useDateRangeSwitch = false //keeps track of whether to use dateRangeData or globsiteData
 var globCategoriesHostname
 var globCategoriesCategory
+var earliestDate
+var latestDate
+var setDates = false; 
 
 
-function listSiteData(siteData, checkDupes)
+function listSiteData(siteData)
 {
 
 	//adds times for duplicates
@@ -18,13 +21,13 @@ function listSiteData(siteData, checkDupes)
 	var temp = ""
 	for (site in siteData){
 		temp = String(siteData[site]["hostname"])
-		if(temp == extensionid) temp="ProactiveBruin";
-		if (!sitename.includes(temp) || !checkDupes){ //for use in line charts will not add duplicate hostnames on different days
+		//if(temp == extensionid) temp="ProactiveBruin";
+		if (!sitename.includes(temp)){ //for use in line charts will not add duplicate hostnames on different days
 			sitename.push(temp)
-			sitetime.push(Number(siteData[site]["time"]))
+			sitetime.push(parseInt(siteData[site]["time"]))
 		}
-		else if (sitename.includes(temp) && checkDupes){
-			sitetime[sitename.indexOf(temp)] += Number(siteData[site]["time"])
+		else if (sitename.includes(temp)){
+			sitetime[sitename.indexOf(temp)] += parseInt(siteData[site]["time"])
 		}		
 	}
 
@@ -63,6 +66,14 @@ function historyFormat(siteData)
 	//sort sitedates in ascending order
 	sitedates.sort();
 
+	//sets the earliest and latest dates for checking if the dates entered are valid
+	if(!setDates){
+	earliestDate = sitedates[0]
+	latestDate = sitedates[sitedates.length-1]
+	setDates=true
+	}
+
+
 	//add columns corresponding to each site name
 	sitenames.forEach(sName => data.addColumn('number',sName));
 	console.log(data);
@@ -95,7 +106,7 @@ function historyFormat(siteData)
 
 function drawCharts(siteData) {
 
-	var data = google.visualization.arrayToDataTable(listSiteData(siteData, true)); 
+	var data = google.visualization.arrayToDataTable(listSiteData(siteData)); 
 
 	//piechart
 	var piechart_options = {
@@ -115,17 +126,15 @@ function drawCharts(siteData) {
 	barchart.draw(bardata, barchart_options); //TODO: Make this more readable with only top websites ()
 
 	//linechart
-	//Note: here you would put true for listSiteData so dupes are not added together
 	data = historyFormat(siteData);
 	var linechart_options = {
-		title:'Line Chart: My Daily Screentime',
+		title: "Line Chart: My Daily Screentime",
 		curveType: 'function',
 		legend: {position: 'bottom'},
 		vAxis: {viewWindow:{min: 0} }
 	};
 	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
 	linechart.draw(data, linechart_options); 
-
 }
 
 function drawProgressChart(allGoals) 
@@ -174,7 +183,6 @@ function drawProgressChart(allGoals)
 			["time spent", goal[4]],
 			["time remaining", goal[3]-goal[4]]
 
-			
 		]);
 
 		var options = {
@@ -187,9 +195,8 @@ function drawProgressChart(allGoals)
 		var chart = new google.visualization.PieChart(document.getElementById('donutchart'+index));
 		chart.draw(data,options);
 	});
-
-
 }
+
 
 document.addEventListener('DOMContentLoaded', onLoad, false)
 
@@ -198,7 +205,6 @@ function onLoad() {
 
 	var done = false
 	const bg = chrome.extension.getBackgroundPage()
-
 
 	var xhr = new XMLHttpRequest()
 	xhr.open("POST", "http://localhost:3000/requestData")
@@ -216,28 +222,29 @@ function onLoad() {
 			console.log(siteData)
 			
 			globsiteData = siteData //sets glob var on load
-			
+
+			dateRangeData = siteData
+
+
 			google.charts.setOnLoadCallback(drawCharts(siteData));
 			done = true
 		}
 	}
 }
 
-
+//sets event listener to dropdown
 document.addEventListener('DOMContentLoaded', function(){
 	const selectElement = document.querySelector('.statsselect');
 	selectElement.addEventListener('change', (event) => {
 		const result = document.getElementById('result');
-		result.textContent = `You selected ${event.target.value}`; //Remove after debugging not needed
 		
 		if(event.target.value == 'Websites'){
-			if(useDateRangeSwitch)
+			if(useDateRangeSwitch){
 				google.charts.setOnLoadCallback(drawCharts(dateRangeData));
-			else
+			}
+			else{
 				google.charts.setOnLoadCallback(drawCharts(globsiteData));
-		}
-		else if(event.target.value == "Weekly Breakdown"){
-			//draw line chart here or include line chart in the onload() graphs (so pie bar and line are shown)
+			}
 		}
 		else {
 			drawCategoryChart()
@@ -245,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 })
 
-
+//draws the category chart, has switch for use of a range of site data or all site data
 function drawCategoryChart() {
 	
 	var entertainmentnum = 0
@@ -254,9 +261,9 @@ function drawCategoryChart() {
 	var shoppingnum = 0
 	var data
 	if(!useDateRangeSwitch)
-		data = listSiteData(globsiteData, true)
+		data = listSiteData(globsiteData)
 	else 
-		data = listSiteData(dateRangeData, true)
+		data = listSiteData(dateRangeData)
 
 	for (i=1; i<data.length; i++){
 		temp = String(data[i][0]).trim()
@@ -302,18 +309,9 @@ function drawCategoryChart() {
 	}
 	var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
 	barchart.draw(processeddata, barchart_options);
-
-	/* //linechart
-	//TODO: get data as function of time
-	var linechart_options = {
-		title: "Line Chart: My Monthly Screentime",
-		curveType: 'function'
-	};
-	var linechart = new google.visualization.LineChart(document.getElementById('linechart'));
-	linechart.draw(data, linechart_options); */
 }
 
-
+//gets a date range from back end, sets global var dateRangeData to data
 function getDateRange(start, end){
 
 	var done = false
@@ -328,13 +326,13 @@ function getDateRange(start, end){
 		if (!done) {
 			let returnData = xhr.responseText.trim()
 			if (returnData === "") return
-			siteDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
+			siteDataTextrange = '{' + "\"key_val\":" + xhr.responseText + '}'
 
-			console.log(siteDataText)
-			siteData = JSON.parse(siteDataText)["key_val"]
+			console.log(siteDataTextrange)
+			siteDatarange = JSON.parse(siteDataTextrange)["key_val"]
 
-			//google.charts.setOnLoadCallback(drawCharts(siteData));
-			dateRangeData = siteData
+			dateRangeData = siteDatarange
+
 			done = true
 		}
 	}
@@ -355,35 +353,135 @@ $( document ).ready(function() {
 	});
 });
 
-
+//adds event listeners to each of the buttons (toggle, add, delete, reset, refresh, search clear)
 document.addEventListener('DOMContentLoaded', function(){
 	document.getElementById("myBtn").addEventListener("click", function() {
 		if(!useDateRangeSwitch){
-			var start = window.prompt("Enter start date: ")
-			var end = window.prompt("Enter end date: ")
-			while(!end){} //not sure if needed, intended to wait untill user inputs vals before requesting data
-			var data
-			if(end != undefined && start != undefined){ //TODO: add helper func to check if valid data
-				data = getDateRange(start, end)
+			var start = window.prompt("Enter start date (YYYY-MM-DD): ")
+			var end = window.prompt("Enter end date (YYYY-MM-DD): ")
+			//while(!end){} //not sure if needed, intended to wait untill user inputs vals before requesting data
+			if(start && end && validDate(start,end)){ 
+				getDateRange(start, end)
+
 				const Btn = document.getElementById('myBtn');
 				Btn.textContent = `Date Range Shown`;
 				useDateRangeSwitch = true;
+				if(document.getElementById('statsselect').value=="Websites"){
+					google.charts.setOnLoadCallback(drawCharts(temp))
+				}
+				else{
+					google.charts.setOnLoadCallback(drawCategoryChart())
+				}
 			}
-		drawCharts(dateRangeData)
+			else{
+				window.alert("Invalid Date.\nUse format YYYY-MM-DD\nEarliest Date: " + earliestDate + "\nLatest Date: " + latestDate)
+				return
+			}
 		}
 
 		else{
 				const Btn = document.getElementById('myBtn');
 				Btn.textContent = `All Data Shown`;
 				useDateRangeSwitch = false;
-				drawCharts(globsiteData)
+				if(document.getElementById('statsselect').value=="Websites")
+					google.charts.setOnLoadCallback(drawCharts(globsiteData))
+				else{
+					getCategoryTable()
+					drawCategoryChart(globsiteData)
+				}
 		}
 	});
+  document.getElementById("resetCat").addEventListener("click", function() {
+    resetCatTable();
+  });
+  document.getElementById("searchCat").addEventListener("click", function() {
+  	siteSearched = document.getElementById("websiteString").value
+  	if(siteSearched == "")
+  		window.alert("Error\nEmpty String")
+  	else if(globCategoriesHostname.includes(siteSearched)){
+  		window.alert(siteSearched + " is currently in the category " + globCategoriesCategory[globCategoriesHostname.indexOf(siteSearched)])
+  	}
+  	else
+  		window.alert(siteSearched + " has not been categorized\nHit the add button to categorize the site")
+  });
+  document.getElementById("addCat").addEventListener("click", function() {
+  	 siteToAdd = document.getElementById("websiteString").value
+  	 if(siteToAdd == "")
+  		window.alert("Error\nEmpty String")
+  	 else if(globCategoriesHostname.includes(siteToAdd))
+  	 	window.alert("Site is already catagorized.\nHit Update to change the associated category")
+  	 else{
+  	 	var userCat = window.prompt("Enter the category of the site:")
+  	 	if(userCat == "Entertainment" || userCat == "Shopping" || userCat=="Productivity"){
+  		 	const bg = chrome.extension.getBackgroundPage()
+			var xhr = new XMLHttpRequest()
+			xhr.open("POST", "http://localhost:3000/addCat")
+			xhr.setRequestHeader("Content-Type", "application/json")
+			xhr.send(JSON.stringify({"id":bg.id, "hostname":siteToAdd, "category":userCat}))
+			getCategoryTable()
+		}
+		else
+			window.alert(userCat + " is not a valid category\nTry again with categories: \"Entertainment\", \"Productivity\", or \"Shopping\"")
+  	 }
+  });
+  document.getElementById("deleteCat").addEventListener("click", function() {
+  	  siteToDelete = document.getElementById("websiteString").value
+  	  if(siteToDelete == "")
+  		window.alert("Error\nEmpty String")
+  	  else if(!globCategoriesHostname.includes(siteToDelete))
+  	 	window.alert("Site is not catagorized.\nNothing to delete")
+  	 else{
+  	 	const bg=chrome.extension.getBackgroundPage()
+  	 	var xhr = new XMLHttpRequest()
+  	 	xhr.open("POST", "http://localhost:3000/deleteCat")
+  	 	xhr.setRequestHeader("Content-Type", "application/json")
+  	 	xhr.send(JSON.stringify({"id":bg.id, "hostname":siteToDelete}))
+  	 	window.alert(siteToDelete + " has been deleted from your categories")
+		getCategoryTable()
+  	 }
+  });
+ document.getElementById("updateCat").addEventListener("click", function() {
+ 	 siteToUpdate = document.getElementById("websiteString").value
+	 if(siteToUpdate == "")
+  		window.alert("Error\nEmpty String")
+  	else if(!globCategoriesHostname.includes(siteToUpdate))
+  		window.alert("Site is not catagorized.\nNothing to update")
+  	else{
+  		newCat = window.prompt("Enter the new category for " + siteToUpdate)
+  		if(newCat=="Entertainment"||newCat=="Shopping"||newCat=="Productivity"){
+  			const bg=chrome.extension.getBackgroundPage()
+  		 	var xhr = new XMLHttpRequest()
+  		 	xhr.open("POST", "http://localhost:3000/updateCat")
+	  	 	xhr.setRequestHeader("Content-Type", "application/json")
+	  	 	xhr.send(JSON.stringify({"id":bg.id, "hostname":siteToUpdate, "category":newCat}))
+  	 		window.alert(siteToUpdate + "'s category has been updated to " + newCat)
+			getCategoryTable()
+	    }
+	    else
+			window.alert(userCat + " is not a valid category\nTry again with categories: \"Entertainment\", \"Productivity\", or \"Shopping\"")
+  	}
+ });
+  document.getElementById("clearCat").addEventListener("click", function() {
+  	 const bg=chrome.extension.getBackgroundPage()
+  	 var xhr = new XMLHttpRequest()
+  	 xhr.open("POST", "http://localhost:3000/clearCat")
+  	 xhr.setRequestHeader("Content-Type", "application/json")
+  	 xhr.send(JSON.stringify({"id":bg.id}))
+  	 window.alert("Your categories have been cleared. Add categories with Add button")
+  	 globCategoriesHostname = []
+	 globCategoriesCategory = []
+	 getCategoryTable()
+  });
+  document.getElementById("refreshCat").addEventListener("click", function() {
+  	if(document.getElementById("statsselect").value=="Websites")
+  		window.alert("You are not viewing the category chart")
+  	else
+  		drawCategoryChart()
+  });
 })
 
-
+//gets the category table from the back-end 
 document.addEventListener('DOMContentLoaded', getCategoryTable, false)
-
 function getCategoryTable(){
 	var done = false
 	const bg = chrome.extension.getBackgroundPage()
@@ -409,7 +507,7 @@ function getCategoryTable(){
 	}
 }
 
-
+//splits category 2D array into 1D arrays, easier to search through
 function CategoriestoArray(data){
 	tempHostname = []
 	tempCategory = []
@@ -423,19 +521,30 @@ function CategoriestoArray(data){
 	globCategoriesCategory = tempCategory
 }
 
-
+//resets category table to our pre-set version
 function resetCatTable(){
 	const bg = chrome.extension.getBackgroundPage()
 
-	var xhr = new XMLHttpRequest()	//clears cat table
-	xhr.open("POST", "http://localhost:3000/clearCat")
-	xhr.setRequestHeader("Content-Type", "application/json")
-	xhr.send(JSON.stringify({"id":bg.id}))
-
 	var xhr = new XMLHttpRequest()	//fills cat table with preset vals
-	xhr.open("POST", "http://localhost:3000/fillCat")
+	xhr.open("POST", "http://localhost:3000/clearandfillCat")
 	xhr.setRequestHeader("Content-Type", "application/json")
 	xhr.send(JSON.stringify({"id":bg.id}))
 
-	drawCategoryChart();
+	getCategoryTable()
+}
+
+//returns true if valid date, false otherwise
+function validDate(start, end){
+	if(start.length==10&&end.length==10&&start.charAt(4)=='-'&&end.charAt(4)=='-'&&start.charAt(7)=='-'&&end.charAt(7)=='-'
+		&&!isNaN(start.substring(0,4))&&!isNaN(end.substring(0,4))&&Number(start.substring(0,4))<=Number(end.substring(0,4))
+			&&!isNaN(start.substring(5,7))&&!isNaN(end.substring(5,7))&&Number(start.substring(5,7))<=Number(end.substring(5,7))
+			&&!isNaN(start.substring(8,10))&&!isNaN(end.substring(8,10))&&Number(start.substring(8,10))<=Number(end.substring(8,10))
+			&&Number(earliestDate.substring(0,4))<=Number(start.substring(0,4))&&Number(earliestDate.substring(5,7))<=Number(start.substring(5,7))
+			&&Number(earliestDate.substring(8,10))<=Number(start.substring(8,10))&&Number(earliestDate.substring(0,4))<=Number(end.substring(0,4))
+			&&Number(end.substring(0,4))<=Number(latestDate.substring(0,4))&&Number(end.substring(5,7))<=Number(latestDate.substring(5,7))
+			&&Number(end.substring(8,10))<=Number(latestDate.substring(8,10)))
+			{
+		return true; 
+	}
+	return false; 
 }
