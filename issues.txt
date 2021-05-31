@@ -9,6 +9,8 @@ Front End
 	- actually display form input entry
 	- content security policy issue
 
+- When the user adds a date range, to see the change you have to cycle the dropdown (click categories then websites again) for the graphs to update
+
 Back End
 - Add checks to ensure robust functionality
 	- user ID and goal ID must be valid

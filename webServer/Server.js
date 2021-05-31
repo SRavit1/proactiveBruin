@@ -182,3 +182,103 @@ var PORT = 3000
 app.listen(PORT, function() {
     console.log("Listening on port " + PORT)
 });
+
+app.post('/requestCatData', function (req, res) {
+	console.log("requestCatData request to server")
+
+	let selectQuery = "SELECT * FROM " + req.body.id + "_cat;";
+	//console.log(deleteGoalQuery)
+	let result = sync_con.query(selectQuery)
+	res.send(result)
+	res.end()
+})
+
+
+app.post('/deleteCat', function (req, res) {
+	let deleteCatQuery = "DELETE FROM " + req.body.id + "_cat WHERE hostname=\"" + req.body.hostname + "\";";
+	console.log(deleteCatQuery)
+	sync_con.query(deleteCatQuery)
+	//res.end()
+})
+
+
+app.post('/addCat', function (req, res) {
+	console.log("sendCategorizationData request to server")
+	let createAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
+		"(\"" + req.body.hostname + "\", \"" + req.body.category + "\");";
+	console.log(createAddQuery)
+	sync_con.query(createAddQuery)
+
+})
+
+app.post('/updateCat', function (req, res) {
+	console.log("update request to server")
+	let createUpdateQuery = "UPDATE " + req.body.id + "_cat SET category=" +
+		"\"" + req.body.category + "\" " + "WHERE hostname=\"" + req.body.hostname + "\";";
+	console.log(createUpdateQuery)
+	sync_con.query(createUpdateQuery)
+})
+
+app.post('/clearandfillCat', function (req, res) {	//fills table with premade vals 
+	console.log("clearing cat table")
+	let tempClearQuery = "DELETE FROM " + req.body.id + "_cat"
+	sync_con.query(tempClearQuery)	
+		
+	console.log("filling category table")
+		for(i=0;i<Entertainment.length;i++){
+			let tempAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
+		"(\"" + Entertainment[i] + "\", \"Entertainment\");";
+			sync_con.query(tempAddQuery)
+		}
+		for(i=0;i<Productivity.length;i++){
+			let tempAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
+		"(\"" + Productivity[i] + "\", \"Productivity\");";
+			sync_con.query(tempAddQuery)		
+		}
+		for(i=0;i<Shopping.length;i++){
+			let tempAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
+		"(\"" + Shopping[i] + "\", \"Shopping\");";
+			sync_con.query(tempAddQuery)		
+		}
+})
+
+app.post('/clearCat', function(req,res){	//empties table 
+	let clear = "DELETE FROM " + req.body.id + "_cat"
+	console.log(clear)
+	sync_con.query(clear)		
+})
+
+
+var Entertainment =[
+"www.youtube.com",
+"www.netflix.com",
+"www.hulu.com",
+"www.twitch.tv",
+"www.disneyplus.com",
+"www.primeivideo.com",
+"www.xfinity.com",
+"www.hbomax.com"
+]
+
+var Productivity = [
+"accounts.google.com",
+"drive.google.com",
+"ccle.ucla.edu",
+"mail.google.com",
+"www.google.com",
+"stackoverflow.com",
+"libgen.is",
+"extensions",
+"ProactiveBruin",
+"www.javascripttutorial.net",
+"github.com",
+"stackoverflow.com",
+"docs.google.com",
+"web.cs.ucla.edu"
+]
+
+var Shopping = [
+"www.target.com",
+"www.amazon.com",
+"www.urbanoutfitters.com"
+]
