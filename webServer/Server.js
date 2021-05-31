@@ -109,13 +109,29 @@ Sample call:
 }
 */
 app.post('/createGoal', function (req, res) {
-	//TODO: How can we prevent duplicate goals?
-	//TODO: How can we conduct error checking for input?
-
 	let goalID = utils.generateID()
 
+	todayDate = new Date()
 	startDate = new Date(req.body.startDate)
 	endDate = new Date(req.body.endDate)
+
+	//end date must come after start date; start date must come after today's date
+	if (!(startDate >= todayDate && endDate >= startDate)) {
+		res.end()
+		return
+	}
+
+	existingGoalQuery = "SELECT * FROM " + req.body.id + "_goal WHERE hostname=\"" + req.body.hostname + "\";"
+	existingGoalRes = sync_con.query(existingGoalQuery)
+	for (let i = 0; i < existingGoalRes.length; i++) {
+		let date_i = new Date(existingGoalRes[i].date)
+		if (!(date_i < startDate || date_i > endDate)) {
+			//Invalid goal
+			res.end()
+			return
+		}
+	}
+	//Valid goal
 
 	startDateString = utils.getDateString(startDate)
 	endDateString = utils.getDateString(endDate)
@@ -146,13 +162,11 @@ app.post('/createGoal', function (req, res) {
 			"(\"" + utils.getDateString(currDate) + "\", \"" + goalID + "\", \"" + req.body.hostname + "\", " + targetTime[i] + ", 0);"
 		console.log(createGoalQuery)
 
-		else {
-			sync_con.query(createGoalQuery)
-			res.end()
-		}
+		sync_con.query(createGoalQuery)
 
 		currDate.setDate(currDate.getDate() + 1)
 	}
+	res.end()
 })
 
 /*
@@ -225,6 +239,7 @@ app.post('/clearandfillCat', function (req, res) {	//fills table with premade va
 	sync_con.query(tempClearQuery)	
 		
 	console.log("filling category table")
+	//TODO: We can make this automated!
 		for(i=0;i<Entertainment.length;i++){
 			let tempAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
 		"(\"" + Entertainment[i] + "\", \"Entertainment\");";
