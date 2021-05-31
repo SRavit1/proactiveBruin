@@ -62,26 +62,18 @@ function processGoalRequest()
     console.log("calling processGoalRequest")
     var h = document.getElementsByName("hostn")[0].value
     var sd = document.getElementsByName("sDate")[0].value
-    console.log("yooo"+sd)
 	var ed = document.getElementsByName("eDate")[0].value
 	var sg = document.getElementsByName("SGoal")[0].value
 	var eg = document.getElementsByName("eGDate")[0].value
-	//var h = document.getElementsByName("hostn")[0].value
 	sendGoalRequest(sd, ed, sg, eg, h, "linear")
-    return h
 }
 
-function getHost ()
-{
-    var h = document.getElementsByName("hostn")[0].value
-    return h
-}
 var t = null;
 const bg = chrome.extension.getBackgroundPage();
 function deleteGoalRequest(goal_id) {
     var createGoalReq = {
-        "id": bg.id,
-        "goal_id": goal_id //how do i access the goal id?
+        "id" : bg.id,
+        "goal_id" : goal_id //how do i access the goal id?
     }
     var done = false
     var xhr = new XMLHttpRequest()
@@ -120,9 +112,9 @@ function refreshData(){
 		if (!done) {
 			let returnData = xhr.responseText.trim()
 			if (returnData === "") return
-			siteDataText = returnData;// '{' + "\"key_val\":" + xhr.responseText + '}'
+			siteDataText = returnData;
 			console.log(siteDataText)
-			siteData = JSON.parse(siteDataText); //["key_val"]
+			siteData = JSON.parse(siteDataText); 
 
             goalDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
             goalData = JSON.parse(goalDataText)["key_val"];
@@ -143,10 +135,8 @@ function refreshData(){
             drawProgressChart(allGoals);
 			
 			done = true
-            //call here to get the data
+
             try{
-                
-                //var t = $('#goals').DataTable();
                 if($.fn.dataTable.isDataTable("#goals")) {
                     t.clear();
                     t.rows.add(siteData);
@@ -156,17 +146,15 @@ function refreshData(){
                         data: siteData,
                         columns: [
                             { title: "Website" , data: 'hostname'},
-                            { title: "Start Date", data: 'date' , render: dateFormat},
-                            { title: "End Date", data: 'date' , render: dateFormat},
-                            { title: "Start Goal", data: 'timeSpent' },
-                            { title: "End Goal", data: 'timeTarget' },
-                            { title: "Goal", data: 'goal_id' }
-                            //{ title: "Edit" }
+                            { title: "Date", data: 'date' , render: dateFormat},
+                            //{ title: "Start Date", data: 'date' , render: dateFormat},
+                            //{ title: "End Date", data: 'date' , render: dateFormat},
+                            { title: "Time Spent", data: 'timeSpent' },
+                            { title: "Time Target", data: 'timeTarget' },
+                            { title: "Goal", data: 'goal_id' } // here for troubleshooting
                         ]
                     });
                     $('#goals tbody').on( 'click', 'tr', function () {
-        
-                        //var t = $('#goals').DataTable();
                         if ( $(this).hasClass('selected') ) {
                             $(this).removeClass('selected');
                         }
@@ -180,16 +168,30 @@ function refreshData(){
         }catch(e){
             // TODO: troubleshoot
         }
-        console.log("entered" + getHost())
-        
-    }        //processGoalRequest();
+    }
     }
 }
 
-document.onload = function() {
-document.getElementById('refreshGoals').onclick = function() {
+$(() => {
+    $('#refreshGoals').on('click', (e)=>{
+        refreshData();
+    });  
+    $('#button').click( function () {
+        var goal_id = null;
+        var row = t.row('.selected');
+        if(!row || !row.data()) { alert('Error: row is not selected'); return; }
+        goal_id = row.data().goal_id;
+        if(!goal_id) { alert('Error: goal id is not selected'); return; }
+
+        row.remove().draw( false );
+        
+        deleteGoalRequest(goal_id);
+    } );
+    $('#sendGoalButton').on('click', (e)=>{
+        processGoalRequest();
+    });
     refreshData();
-};
+});
 
 document.getElementById('button').onclick = function () {
     var goal_id = null;
@@ -206,9 +208,5 @@ document.getElementById('button').onclick = function () {
 document.getElementById('sendGoalButton').onclick = function() {
     //var t = $('#goals').DataTable();
     processGoalRequest();
-    t.row.add( [
-        { title: "Website" , data: getHost()}
-    ] ).draw( false );
 }
 refreshData();
-}
