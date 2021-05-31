@@ -51,7 +51,7 @@
     
   </div>
   <div class="row">
-    <div class="col-sm-6" style="width:50vw">
+     <div class="col-sm-6" style="width:50vw">
       <h4 class="desc" id="directions">add the website you would like to track! provide the date you would like to start tracking your goal and the date you wish to achieve your goal. then, add your starting alotted time and your goal screentime for the particular website by the end date.</h4>
       <fieldset>
         <button id="button">Delete selected row</button>
@@ -68,7 +68,6 @@
                     <th>End Goal</th>
                 </tr>
             </thead>
-
         </table-->
       <button id="refreshGoals">Refresh <i class="fa fa-refresh"></i></button>
         <!--table class="table table-bordered table-hover">
@@ -91,7 +90,7 @@
               <td>15</td>
               <td><a class="btEditGoal"><i class="fa fa-edit"></i></a></td>
             </tr>
-			  <tr>
+        <tr>
               <td>Social Media</td>
               <td>05-16-2021</td>
               <td>05-30-2021</td>
@@ -109,13 +108,13 @@
               <label class="control-label col-sm-4" for="pwd">Method:</label>
               <div class="col-sm-8">
                 <select class="form-control">
-				  	<option>linear</option>
-				  </select>
+            <option>linear</option>
+          </select>
               </div>
             </div>
           </div-->
 
-			<div class="form-group">
+      <div class="form-group">
         <div class="col-sm-12">
           <!--<td><a class="btEditGoal"><i class="fa fa-edit"></i></a></td>-->
           
@@ -140,7 +139,7 @@
               </div>
             </div>
           </div>
-			<div class="form-group">
+      <div class="form-group">
             <div class="col-sm-6">
               <label class="control-label col-sm-4" for="pwd">Start Goal:</label>
               <div class="col-sm-8">
@@ -154,28 +153,24 @@
               </div>
             </div>
           </div>
-			<div class="form-group btnRow">
-				<!--<a type="submit" id="saveGoal" class="btn btn-primary  active"><i class="fa fa-save"></i> Save</a>
-
-				<button onclick="myFunction()">Save</button>
-				<button onclick="myFunction()">Cancel</button>
-
-				<button onclick="myFunction()">Click me</button>
-				<a type="submit" id="cancelGoal" class="btn btn-default active"><i class="fa fa-times"></i> Cancel</a>-->
-				<button id="sendGoalButton">Save</button>
-				<button>Cancel</button>
-			</div>
+      <div class="form-group btnRow">
+        <!--<a type="submit" id="saveGoal" class="btn btn-primary  active"><i class="fa fa-save"></i> Save</a>
+        <button onclick="myFunction()">Save</button>
+        <button onclick="myFunction()">Cancel</button>
+        <button onclick="myFunction()">Click me</button>
+        <a type="submit" id="cancelGoal" class="btn btn-default active"><i class="fa fa-times"></i> Cancel</a>-->
+        <button id="sendGoalButton">Save</button>
+        <button>Cancel</button>
+      </div>
         </form>
       </div>
 
-		<!--<button href="/goals.html" type="button" class="btn btn-success">set your goals!</button> 
+    <!--<button href="/goals.html" type="button" class="btn btn-success">set your goals!</button> 
       <p>Set Goal for social media use: &nbsp;</p>
       <p>Set Goal for _____ use: &nbsp;</p>-->
     </div>
     <div class="col-sm-6">&nbsp;
-      <div id="progresscharts"> </div>
-    </div>
-	  
+     <div id="progresscharts"> </div>
   </div>
   <div class="row">
     <div class="col-sm-12">
@@ -183,24 +178,44 @@
       <h4 class="desc">view your screentime stats!</h4>
  
     <div id="piechart" class="charts"> </div>
-	  <div id="barchart" class="charts"> </div>
+    <div id="barchart" class="charts"> </div>
     <div id="linechart" class ="charts"> </div>
-		<div id="result"></div>
-    	</div>
-    	<div class="col-sm-6">
-		  <select class="statsselect" name="statsselect">
- 			 	  	<option value="">Select One...</option>
-  				  	<option value="Websites">Websites</option>
-  				  	<option value="Catagories">Catagories</option>
-  				  	<option value="Weekly Breakdown">Weekly Breakdown</option>
- 			 </select> 
-		<div>
-      			<h5><em>Toggle Date Range in Charts</em></h5>
-     	        	<button id="myBtn">Toggle</button>
-    		</div>
-    	</div>
+    <div id="result"></div>
+      </div>
+      <nobr>
+      <div class="col-sm-6">
+        Stats shown:
+      <select class="statsselect" name="statsselect" id="statsselect">
+            <!--<option value="">Select One...</option>-->
+              <option value="Websites">Websites</option>
+              <option value="Catagories">Catagories</option>
+              <!--<option value="Weekly Breakdown">Weekly Breakdown</option>-->
+       </select> 
+       Interact with a categorized site:
+       <input type="text" id="websiteString">
+       <button id="searchCat">Search</button>
+       <button id="addCat">Add</button>
+       <button id="deleteCat">Delete</button>
+       <button id="updateCat">Update</button>
+
+
+       <div>
+       Clear All Categories: 
+       <button id="clearCat">Clear</button>
+       Reset Categories to Default:
+       <button id="resetCat">Reset</button>
+       Refresh Categories Graph:
+       <button id="refreshCat">Refresh</button>
+
+     </div>
+    <div>
+            Add a date range to stats:
+                <button id="myBtn">Add Date Range</button>
+        </div>
+      </div>
+    </nobr>
       <p>&nbsp; </p>
     </div>
-  
+  </div>
 </body>
 </html> 
