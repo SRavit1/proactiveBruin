@@ -186,28 +186,29 @@ function refreshData(){
     }
 }
 
-$(() => {
-    $('#refreshGoals').on('click', (e)=>{
-        refreshData();
-    });  
-    $('#button').click( function () {
-        var goal_id = null;
-        //var t = $('#goals').DataTable();
-        var row = t.row('.selected');
-        if(!row || !row.data()) { alert('Error: row is not selected'); return; }
-        goal_id = row.data().goal_id;
-        if(!goal_id) { alert('Error: goal id is not selected'); return; }
-
-        row.remove().draw( false );
-        
-        deleteGoalRequest(goal_id);
-    } );
-    $('#sendGoalButton').on('click', (e)=>{
-        //var t = $('#goals').DataTable();
-        processGoalRequest();
-        t.row.add( [
-            { title: "Website" , data: getHost()}
-        ] ).draw( false );
-    });
+document.onload = function() {
+document.getElementById('refreshGoals').onclick = function() {
     refreshData();
-});
+};
+
+document.getElementById('button').onclick = function () {
+    var goal_id = null;
+    //var t = $('#goals').DataTable();
+    var row = t.row('.selected');
+    if(!row || !row.data()) { alert('Error: row is not selected'); return; }
+    goal_id = row.data().goal_id;
+    if(!goal_id) { alert('Error: goal id is not selected'); return; }
+
+    row.remove().draw( false );
+    
+    deleteGoalRequest(goal_id);
+}
+document.getElementById('sendGoalButton').onclick = function() {
+    //var t = $('#goals').DataTable();
+    processGoalRequest();
+    t.row.add( [
+        { title: "Website" , data: getHost()}
+    ] ).draw( false );
+}
+refreshData();
+}
