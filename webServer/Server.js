@@ -194,25 +194,35 @@ app.post('/requestCatData', function (req, res) {
 
 app.post('/deleteCat', function (req, res) {
 	let deleteCatQuery = "DELETE FROM " + req.body.id + "_cat WHERE hostname=\"" + req.body.hostname + "\";";
-	//console.log(deleteGoalQuery)
+	console.log(deleteCatQuery)
 	sync_con.query(deleteCatQuery)
-	res.end()
+	//res.end()
 })
 
 
 app.post('/addCat', function (req, res) {
 	console.log("sendCategorizationData request to server")
-	let createGoalQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
-		"(\"" + req.body.hostname + "\", " + req.body.category + "\");";
+	let createAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
+		"(\"" + req.body.hostname + "\", \"" + req.body.category + "\");";
+	console.log(createAddQuery)
+	sync_con.query(createAddQuery)
+
 })
 
 app.post('/updateCat', function (req, res) {
 	console.log("update request to server")
 	let createUpdateQuery = "UPDATE " + req.body.id + "_cat SET category=" +
 		"\"" + req.body.category + "\" " + "WHERE hostname=\"" + req.body.hostname + "\";";
+	console.log(createUpdateQuery)
+	sync_con.query(createUpdateQuery)
 })
 
-app.post('/fillCat', function (req, res) {	//fills table with premade vals 
+app.post('/clearandfillCat', function (req, res) {	//fills table with premade vals 
+	console.log("clearing cat table")
+	let tempClearQuery = "DELETE FROM " + req.body.id + "_cat"
+	sync_con.query(tempClearQuery)	
+		
+	console.log("filling category table")
 		for(i=0;i<Entertainment.length;i++){
 			let tempAddQuery = "INSERT INTO " + req.body.id + "_cat (hostname, category) VALUES " +
 		"(\"" + Entertainment[i] + "\", \"Entertainment\");";
@@ -232,6 +242,7 @@ app.post('/fillCat', function (req, res) {	//fills table with premade vals
 
 app.post('/clearCat', function(req,res){	//empties table 
 	let clear = "DELETE FROM " + req.body.id + "_cat"
+	console.log(clear)
 	sync_con.query(clear)		
 })
 
