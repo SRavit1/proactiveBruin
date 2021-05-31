@@ -109,9 +109,9 @@ function dateFormat(data, type, row) {
 }
 
 function refreshData(){
-        var done = false
-        
-        var xhr = new XMLHttpRequest()
+    var done = false
+    google.charts.load('current', {'packages':['corechart']});
+    var xhr = new XMLHttpRequest()
 	xhr.open("POST", "http://localhost:3000/requestGoalData")
 	xhr.setRequestHeader("Content-Type", "application/json")
 
@@ -124,11 +124,24 @@ function refreshData(){
 			console.log(siteDataText)
 			siteData = JSON.parse(siteDataText); //["key_val"]
 
+            goalDataText = '{' + "\"key_val\":" + xhr.responseText + '}'
+            goalData = JSON.parse(goalDataText)["key_val"];
+
 			console.log(siteData);
+
+            var allGoals = [] //will contain all elements of goal
+            console.log(allGoals)
+			for (goal in goalData){
+                if (goalData[goal]["date"] != "")
+                {
+                    console.log(goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"])
+                    allGoals.push([goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]])
+                }
+                    
+            }
+			console.log("allGoals: " + allGoals);
+            drawProgressChart(allGoals);
 			
-			//globsiteData = siteData //sets glob var on load
-			
-			//google.charts.setOnLoadCallback(drawCharts(siteData));
 			done = true
             //call here to get the data
             try{

@@ -1,7 +1,7 @@
 background_window = chrome.extension.getBackgroundPage().window
 
 //keeps stores site data and cleaned data for global use
-var globsiteData 
+var globsiteData
 var extensionid = chrome.runtime.id	//32 char id given to each extension 
 var dateRangeData
 var useDateRangeSwitch = false //keeps track of whether to use dateRangeData or globsiteData
@@ -85,7 +85,7 @@ function historyFormat(siteData)
 		}
 		newRow = date.concat(newRow);
 
-		console.log(newRow);
+		//console.log(newRow);
 		data.addRow(newRow);
 		console.log(data);
 	});
@@ -128,14 +128,32 @@ function drawCharts(siteData) {
 
 }
 
-function drawProgressChart(allGoals)
+function drawProgressChart(allGoals) 
 {
+	//allGoals in the form of [goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]]
+
 	//create progress bars in div id="progresscharts"
 	var chartElement = document.getElementById("progresscharts");
-	
-	//first, sort by % amount completed
+	chartElement.setAttribute("style","width:100vw");
+
+	//update with correct time spent on each website TODO: ideally masterScript/updateGoals.js should do this later
+	console.log("globSiteData" + globsiteData)
+	allGoals.forEach(function(goal,index){
+		var hostname = goal[2];
+		
+		var timeSpent = 0;
+		for (site in globsiteData){
+			if (String(globsiteData[site]["hostname"]) === hostname)
+			{
+				timeSpent = timeSpent+ Number(globsiteData[site]["time"]);
+			}
+		}
+		goal[4] = timeSpent;
+	});
+
+	//sort by % amount completed
 	goalData.sort(function(a,b) {
-		//in the form [goalData[goal]["date"], goalData[goal]["goal_id"], goalData[goal]["hostname"], goalData[goal]["timeTarget"], goalData[goal]["timeSpent"]]
+		
 		var a_percent = a[4] / a[3];
 		var b_percent = b[4] / b[3];
 		return b_percent-a_percent;
@@ -145,21 +163,25 @@ function drawProgressChart(allGoals)
 	allGoals.forEach(function(goal,index){
 		var node = document.createElement("div");
 		node.setAttribute("id", "donutchart"+index);
+		node.setAttribute("style","display:inline-block")
 		chartElement.appendChild(node);
 	});
 
 	//now, create graph
 	allGoals.forEach(function(goal,index){
-		var percent = goal[4] / goal[3];
 		var data = google.visualization.arrayToDataTable([
 			["progress", "amount"],
-			["time spent",goal[4]],
-			["", goal[3]-goal[4]]
+			["time spent", goal[4]],
+			["time remaining", goal[3]-goal[4]]
+
+			
 		]);
 
 		var options = {
 			title: "Progress on: " + goal[2],
-			pieHole: 0.4
+			pieHole: 0.4,
+			colors: ['#61f70a','#8e8f94'],
+			legend: {position:'none'}
 		}
 		
 		var chart = new google.visualization.PieChart(document.getElementById('donutchart'+index));
@@ -417,5 +439,3 @@ function resetCatTable(){
 
 	drawCategoryChart();
 }
-
-
