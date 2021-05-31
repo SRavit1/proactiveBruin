@@ -129,22 +129,24 @@ app.post('/createGoal', function (req, res) {
 
 	targetTime = utils.getGoalTargets(days, startGoal, endGoal, req.body.method)
 
+	if (!(knownIds.includes(req.body.id))) {
+		let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), hostname VARCHAR(255), timeTarget INT, timeSpent INT)";
+		console.log(createGoalTableQuery)
+
+		sync_con.query(createGoalTableQuery)
+		sync_con.query(createGoalQuery)
+		res.end()
+
+		knownIds.push(req.body.id)
+	}
+
 	currDate = startDate
 	for (i = 0; i < days; i++) {
 		let createGoalQuery = "INSERT INTO " + req.body.id + "_goal (date, goal_id, hostname, timeTarget, timeSpent) VALUES " + 
 			"(\"" + utils.getDateString(currDate) + "\", \"" + goalID + "\", \"" + req.body.hostname + "\", " + targetTime[i] + ", 0);"
 		console.log(createGoalQuery)
 
-		if (!(knownIds.includes(req.body.id))) {
-			let createGoalTableQuery = "CREATE TABLE IF NOT EXISTS " + req.body.id + "_goal (date DATE, goal_id VARCHAR(255), hostname VARCHAR(255), timeTarget INT, timeSpent INT)";
-			console.log(createGoalTableQuery)
-
-			sync_con.query(createGoalTableQuery)
-			sync_con.query(createGoalQuery)
-			res.end()
-
-			knownIds.push(req.body.id)
-		} else {
+		else {
 			sync_con.query(createGoalQuery)
 			res.end()
 		}
