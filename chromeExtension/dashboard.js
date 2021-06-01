@@ -143,7 +143,7 @@ function drawProgressChart(allGoals)
 
 	//create progress bars in div id="progresscharts"
 	var chartElement = document.getElementById("progresscharts");
-	chartElement.setAttribute("style","width:100vw");
+	chartElement.setAttribute("style","width:80vw");
 
 	//update with correct time spent on each website TODO: ideally masterScript/updateGoals.js should do this later
 	allGoals.forEach(function(goal,index){
@@ -175,19 +175,21 @@ function drawProgressChart(allGoals)
 		chartElement.appendChild(node);
 	});
 
+	console.log('allGoals data: ', allGoals)
 	//now, create graph
 	allGoals.forEach(function(goal,index){
+		goalExceeded = (goal[3]-goal[4] < 0 ? true : false)
 		var data = google.visualization.arrayToDataTable([
 			["progress", "amount"],
 			["time spent", goal[4]],
-			["time remaining", goal[3]-goal[4]]
+			["time remaining", (goalExceeded ? 0: goal[3]-goal[4])]
 
 		]);
 
 		var options = {
-			title: "Progress on: " + goal[2],
+			title: "Progress on: " + goal[2] + (goalExceeded ? ' (EXCEEDED GOAL!)' : ''),
 			pieHole: 0.4,
-			colors: ['#61f70a','#8e8f94'],
+			colors: (goalExceeded ?	['#FF0000'] : ['#61f70a','#8e8f94']),
 			legend: {position:'none'}
 		}
 		
