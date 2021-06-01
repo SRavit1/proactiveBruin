@@ -2,6 +2,8 @@
 
 ## About
 
+![Proactive Bruin Logo](images/logo.png)
+
 Proactive Bruin is a Chrome extension designed to keep track of and analyze students' online Internet activity. When enabled by the user, it silently runs in the background recording each website visited on Chrome, and the duration of each visit. This data is then visualized onto the dashboard via line charts and bar charts. The user can take charge of their time-spending habits by creating upper time limit goals for a given website. They can also narrow the scope of their search to a certain date range and by grouping websites together into categories.
 
 ## How to run
@@ -24,6 +26,9 @@ Proactive Bruin is a Chrome extension designed to keep track of and analyze stud
 ## Contributors
 
 [Jinwoo Baik](https://github.com/jbaik1)
+
 [Emmett Cocke](https://github.com/Emmettlsc)
+
 [Jasneev Kaur](https://github.com/jasneev)
+
 [Ravit Sharma](https://github.com/SRavit1)
