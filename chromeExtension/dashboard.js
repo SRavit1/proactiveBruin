@@ -24,7 +24,7 @@ function listSiteData(siteData)
 		//if(temp == extensionid) temp="ProactiveBruin";
 		if (!sitename.includes(temp)){ //for use in line charts will not add duplicate hostnames on different days
 			sitename.push(temp)
-			sitetime.push(parseInt(siteData[site]["time"]))
+			sitetime.push(Number(siteData[site]["time"]))
 		}
 		else if (sitename.includes(temp)){
 			sitetime[sitename.indexOf(temp)] += parseInt(siteData[site]["time"])
@@ -34,7 +34,7 @@ function listSiteData(siteData)
 	//add data from webserver
 	var screentimeData = [['Task', 'Hours per Day']];
 	for (i=0; i<sitename.length;i++){
-		screentimeData.push([sitename[i] , sitetime[i]])
+		screentimeData.push([sitename[i] , sitetime[i]/3600])
 	}
 	//sort by time
 	screentimeData.sort(function(a,b){
@@ -87,7 +87,7 @@ function historyFormat(siteData)
 		for (site in siteData){
 			var tempDate = String(siteData[site]["date"]).substring(0,10);
 			var tempName = String(siteData[site]["hostname"]);
-			var tempTime = Number(siteData[site]["time"]);
+			var tempTime = Number(siteData[site]["time"]) / 3600;
 			if (curDate === tempDate) //check that it's the correct day
 			{
 				newRow[sitenames.indexOf(tempName)] = tempTime; //update time
@@ -105,9 +105,9 @@ function historyFormat(siteData)
 }
 
 function drawCharts(siteData) {
-
+	google.load('visualization', '1.0', {'packages':['corechart']});
 	var data = google.visualization.arrayToDataTable(listSiteData(siteData)); 
-
+	console.log("drawCharts data: " , data)
 	//piechart
 	var piechart_options = {
 	  title: 'Pie Chart: My Daily Screentime'
