@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			getCategoryTable()
 	    }
 	    else
-			window.alert(userCat + " is not a valid category\nTry again with categories: \"Entertainment\", \"Productivity\", or \"Shopping\"")
+			window.alert(newCat + " is not a valid category\nTry again with categories: \"Entertainment\", \"Productivity\", or \"Shopping\"")
   	}
  });
   document.getElementById("clearCat").addEventListener("click", function() {
