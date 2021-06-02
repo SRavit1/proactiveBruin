@@ -377,7 +377,9 @@ document.addEventListener('DOMContentLoaded', function(){
 					google.charts.setOnLoadCallback(drawCharts(temp))
 				}
 				else{
+					google.charts.setOnLoadCallback(drawCharts(globsiteData));
 					google.charts.setOnLoadCallback(drawCategoryChart())
+
 				}
 			}
 			else{
@@ -394,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function(){
 					google.charts.setOnLoadCallback(drawCharts(globsiteData))
 				else{
 					getCategoryTable()
-					drawCategoryChart(globsiteData)
+					drawCategoryChart()
 				}
 		}
 	});
@@ -542,16 +544,17 @@ function resetCatTable(){
 
 //returns true if valid date, false otherwise
 function validDate(start, end){
+
 	if(start.length==10&&end.length==10&&start.charAt(4)=='-'&&end.charAt(4)=='-'&&start.charAt(7)=='-'&&end.charAt(7)=='-'
-		&&!isNaN(start.substring(0,4))&&!isNaN(end.substring(0,4))&&Number(start.substring(0,4))<=Number(end.substring(0,4))
-			&&!isNaN(start.substring(5,7))&&!isNaN(end.substring(5,7))&&Number(start.substring(5,7))<=Number(end.substring(5,7))
-			&&!isNaN(start.substring(8,10))&&!isNaN(end.substring(8,10))&&Number(start.substring(8,10))<=Number(end.substring(8,10))
-			&&Number(earliestDate.substring(0,4))<=Number(start.substring(0,4))&&Number(earliestDate.substring(5,7))<=Number(start.substring(5,7))
-			&&Number(earliestDate.substring(8,10))<=Number(start.substring(8,10))&&Number(earliestDate.substring(0,4))<=Number(end.substring(0,4))
-			&&Number(end.substring(0,4))<=Number(latestDate.substring(0,4))&&Number(end.substring(5,7))<=Number(latestDate.substring(5,7))
-			&&Number(end.substring(8,10))<=Number(latestDate.substring(8,10)))
-			{
-		return true; 
+		&&!isNaN(start.substring(0,4))&&!isNaN(end.substring(0,4))&&!isNaN(start.substring(5,7))&&!isNaN(end.substring(5,7))
+		&&!isNaN(start.substring(8,10))&&!isNaN(end.substring(8,10)))
+	{
+		startDaysPast2000 = (Number(start.substring(0,4))-2000) * 365 + Number(start.substring(5,7)) * 30 + Number(start.substring(8,10))
+		endDaysPast2000 = (Number(end.substring(0,4))-2000) * 365 + Number(end.substring(5,7)) * 30 + Number(end.substring(8,10))
+		earliestDateDaysPast2000 = (Number(earliestDate.substring(0,4))-2000) * 365 + Number(earliestDate.substring(5,7)) * 30 + Number(earliestDate.substring(8,10))
+		latestDateDaysPast2000 = (Number(latestDate.substring(0,4))-2000) * 365 + Number(latestDate.substring(5,7)) * 30 + Number(latestDate.substring(8,10))
+		if(startDaysPast2000<=endDaysPast2000&&startDaysPast2000>=earliestDateDaysPast2000&&endDaysPast2000<=latestDateDaysPast2000)
+			return true; 
 	}
 	return false; 
 }
