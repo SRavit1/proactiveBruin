@@ -9,7 +9,7 @@ var globCategoriesHostname
 var globCategoriesCategory
 var earliestDate
 var latestDate
-var setDates = false; 
+var setDates = false
 
 
 function listSiteData(siteData)
@@ -369,18 +369,9 @@ document.addEventListener('DOMContentLoaded', function(){
 			//while(!end){} //not sure if needed, intended to wait untill user inputs vals before requesting data
 			if(start && end && validDate(start,end)){ 
 				getDateRange(start, end)
-
 				const Btn = document.getElementById('myBtn');
-				Btn.textContent = `Date Range Shown`;
+				Btn.textContent = `Click to use all data`;
 				useDateRangeSwitch = true;
-				if(document.getElementById('statsselect').value=="Websites"){
-					google.charts.setOnLoadCallback(drawCharts(temp))
-				}
-				else{
-					google.charts.setOnLoadCallback(drawCharts(globsiteData));
-					google.charts.setOnLoadCallback(drawCategoryChart())
-
-				}
 			}
 			else{
 				window.alert("Invalid Date.\nUse format YYYY-MM-DD\nEarliest Date: " + earliestDate + "\nLatest Date: " + latestDate)
@@ -390,14 +381,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		else{
 				const Btn = document.getElementById('myBtn');
-				Btn.textContent = `All Data Shown`;
+				Btn.textContent = `Click to add a date range`;
 				useDateRangeSwitch = false;
-				if(document.getElementById('statsselect').value=="Websites")
-					google.charts.setOnLoadCallback(drawCharts(globsiteData))
-				else{
-					getCategoryTable()
-					drawCategoryChart()
-				}
 		}
 	});
   document.getElementById("resetCat").addEventListener("click", function() {
@@ -486,6 +471,24 @@ document.addEventListener('DOMContentLoaded', function(){
   		window.alert("You are not viewing the category chart")
   	else
   		drawCategoryChart()
+  });
+  document.getElementById("AllGraphUpdate").addEventListener("click", function() {
+  	if(document.getElementById("statsselect").value=="Websites"){
+ 		if(useDateRangeSwitch)
+ 			drawCharts(dateRangeData)
+ 		else
+ 			drawCharts(globsiteData)
+  	}
+  	else{
+  		if(useDateRangeSwitch){
+ 			drawCharts(dateRangeData) //this will re-draw the line chart
+  			drawCategoryChart()
+  		}
+  		else{
+  			drawCharts(globsiteData)
+  			drawCategoryChart()
+  		}
+  	}
   });
 })
 
