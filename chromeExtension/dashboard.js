@@ -143,17 +143,22 @@ function drawProgressChart(allGoals)
 
 	//create progress bars in div id="progresscharts"
 	var chartElement = document.getElementById("progresscharts");
-	chartElement.setAttribute("style","width:80vw");
+	chartElement.setAttribute("style","width:100%");
 
 	//update with correct time spent on each website TODO: ideally masterScript/updateGoals.js should do this later
 	allGoals.forEach(function(goal,index){
-		var hostname = goal[2];
-		
+		var hostname = String(goal[2]);
+		hostname = hostname.replace(/^(www.)/, '')
 		var timeSpent = 0;
 		for (site in globsiteData){
-			if (String(globsiteData[site]["hostname"]) === hostname)
+			sitename = String(globsiteData[site]["hostname"])
+			sitename = sitename.replace(/^(www.)/, '')
+			if (sitename === hostname)
 			{
 				timeSpent = timeSpent+ Number(globsiteData[site]["time"]);
+			}
+			else{
+				console.log(sitename, " is not equal to ", hostname)
 			}
 		}
 		goal[4] = timeSpent;
@@ -189,8 +194,9 @@ function drawProgressChart(allGoals)
 		var options = {
 			title: "Progress on: " + goal[2] + (goalExceeded ? ' (EXCEEDED GOAL!)' : ''),
 			pieHole: 0.4,
-			colors: (goalExceeded ?	['#FF0000'] : ['#61f70a','#8e8f94']),
-			legend: {position:'none'}
+			colors: (goalExceeded ?	['#ff0000','#ff0000'] : ['#61f70a','#8e8f94']),
+			legend: {position:'none'},
+			width: 250
 		}
 		
 		var chart = new google.visualization.PieChart(document.getElementById('donutchart'+index));
