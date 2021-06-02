@@ -157,9 +157,6 @@ function drawProgressChart(allGoals)
 			{
 				timeSpent = timeSpent+ Number(globsiteData[site]["time"]);
 			}
-			else{
-				console.log(sitename, " is not equal to ", hostname)
-			}
 		}
 		goal[4] = timeSpent;
 	});
